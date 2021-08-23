@@ -13,186 +13,56 @@ servers:
   - url: 'https://uat-portal-backend.the1.co.th/v1'
     description: UAT
 paths:
-  '/users/{userId}':
-    parameters:
-      - schema:
-          type: integer
-        name: userId
-        in: path
-        required: true
-        description: Id of an existing user.
-    get:
-      summary: Get User Info by User ID
-      tags: []
-      responses:
-        '200':
-          description: User Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-              examples:
-                Get User Alice Smith:
-                  value:
-                    id: 142
-                    firstName: Alice
-                    lastName: Smith
-                    email: alice.smith@gmail.com
-                    dateOfBirth: '1997-10-31'
-                    emailVerified: true
-                    signUpDate: '2019-08-24'
-        '404':
-          description: User Not Found
-      operationId: get-users-userId
-      description: Retrieve the information of the user with the matching user ID.
-    patch:
-      summary: Update User Information
-      operationId: patch-users-userId
-      responses:
-        '200':
-          description: User Updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-              examples:
-                Updated User Rebecca Baker:
-                  value:
-                    id: 13
-                    firstName: Rebecca
-                    lastName: Baker
-                    email: rebecca@gmail.com
-                    dateOfBirth: '1985-10-02'
-                    emailVerified: false
-                    createDate: '2019-08-24'
-        '404':
-          description: User Not Found
-        '409':
-          description: Email Already Taken
-      description: Update the information of an existing user.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                email:
-                  type: string
-                  description: 'If a new email is given, the user''s email verified property will be set to false.'
-                dateOfBirth:
-                  type: string
-            examples:
-              Update First Name:
-                value:
-                  firstName: Rebecca
-              Update Email:
-                value:
-                  email: rebecca@gmail.com
-              Update Last Name & Date of Birth:
-                value:
-                  lastName: Baker
-                  dateOfBirth: '1985-10-02'
-        description: Patch user properties to update.
-  /user:
+  /auth/token:
+    parameters: []
     post:
-      summary: Create New User
-      operationId: post-user
+      summary: ''
+      operationId: post-auth-token
       responses:
         '200':
-          description: User Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-              examples:
-                New User Bob Fellow:
-                  value:
-                    id: 12
-                    firstName: Bob
-                    lastName: Fellow
-                    email: bob.fellow@gmail.com
-                    dateOfBirth: '1996-08-24'
-                    emailVerified: false
-                    createDate: '2020-11-18'
+          $ref: '#/components/responses/Authentication-Token'
         '400':
-          description: Missing Required Information
-        '409':
-          description: Email Already Taken
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-DataNotFound'
+      tags:
+        - Authentication
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                email:
-                  type: string
-                dateOfBirth:
-                  type: string
-                  format: date
-              required:
-                - firstName
-                - lastName
-                - email
-                - dateOfBirth
-            examples:
-              Create User Bob Fellow:
-                value:
-                  firstName: Bob
-                  lastName: Fellow
-                  email: bob.fellow@gmail.com
-                  dateOfBirth: '1996-08-24'
-        description: Post the necessary fields for the API to create a new user.
-      description: Create a new user.
+        $ref: '#/components/requestBodies/Authentication-Token'
+  /auth/refresh_token:
+    post:
+      summary: ''
+      operationId: post-auth-refresh_token
+      responses:
+        '200':
+          $ref: '#/components/responses/Authentication-Token'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+      requestBody:
+        $ref: '#/components/requestBodies/Authentication-Refresh'
+      tags:
+        - Authentication
+  /auth/logout:
+    post:
+      summary: ''
+      operationId: post-auth-logout
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+      requestBody:
+        $ref: '#/components/requestBodies/Authentication-Logout'
+      tags:
+        - Authentication
 components:
-  schemas:
-    User:
-      title: User
-      type: object
-      description: ''
-      examples:
-        - id: 142
-          firstName: Alice
-          lastName: Smith
-          email: alice.smith@gmail.com
-          dateOfBirth: '1997-10-31'
-          emailVerified: true
-          signUpDate: '2019-08-24'
-      properties:
-        id:
-          type: integer
-          description: Unique identifier for the given user.
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        dateOfBirth:
-          type: string
-          format: date
-          example: '1997-10-31'
-        emailVerified:
-          type: boolean
-          description: Set to true if the user's email has been verified.
-        createDate:
-          type: string
-          format: date
-          description: The date that the user was created.
-      required:
-        - id
-        - firstName
-        - lastName
-        - email
-        - emailVerified
+  schemas: {}
   securitySchemes:
     Authorization:
       type: oauth2
@@ -202,3 +72,308 @@ components:
           scopes: {}
           refreshUrl: /auth/refresh_token
       description: ''
+  responses:
+    404-DataNotFound:
+      description: Data Not Found
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: false
+                code: '45'
+                message: Unauthorized
+                data: null
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: false
+                code: '04'
+                message: Data not found
+                data: null
+    401-Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: false
+                code: '45'
+                message: Unauthorized
+                data: null
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: false
+                code: '45'
+                message: Unauthorized
+                data: null
+    500-InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: false
+                code: '45'
+                message: Internal Server Error
+                data: null
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: false
+                code: string
+                message: Internal Server Error
+                data: null
+    400-BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: false
+                code: '45'
+                message: Unauthorized
+                data: null
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: false
+                code: '06'
+                message: Missing require field
+                data: null
+            example-2:
+              value:
+                successful: true
+                code: '09'
+                message: Field id must be positive integer
+                data: null
+    403-Forbidden:
+      description: Forbidden or Access Denied
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: false
+                code: '45'
+                message: Unauthorized
+                data: null
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: false
+                code: '41'
+                message: Access Denied
+                data: null
+    Authentication-Token:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            properties:
+              accessToken:
+                type: string
+                minLength: 1
+              expiresIn:
+                type: number
+              refreshExpiresIn:
+                type: number
+              refreshToken:
+                type: string
+                minLength: 1
+              tokenType:
+                type: string
+                minLength: 1
+              notBeforePolicy:
+                type: string
+                minLength: 1
+              sessionState:
+                type: string
+                minLength: 1
+              scope:
+                type: string
+                minLength: 1
+            required:
+              - accessToken
+              - expiresIn
+              - refreshExpiresIn
+              - refreshToken
+              - tokenType
+              - notBeforePolicy
+              - sessionState
+              - scope
+            x-examples:
+              example-1:
+                accessToken: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmVlBKUld3dkhfY3N0NFVKTmJoWEFNSWw0U3NiUWtUQW9oM2dCOVB6dXkwIn0.eyJleHAiOjE2Mjk3MjA4MTQsImlhdCI6MTYyOTY5MjAxNCwianRpIjoiYmM2NzFlNTctYWE5Mi00NzQxLWE0YzgtZjg3MTJjZjA5YzA0IiwiaXNzIjoiaHR0cHM6Ly9kZXYta2V5Y2xvYWsudGhlMS5jby50aC9hdXRoL3JlYWxtcy9wb3J0YWwiLCJzdWIiOiI0ZjcxYTlhNS0wZmU0LTRkNjYtOTE3ZC1mNzMzNmQ1NGExMDYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJwb3J0YWwtZnJvbnRlbmQiLCJzZXNzaW9uX3N0YXRlIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIiwiaHR0cHM6Ly9zaXQtcG9ydGFsLnRoZTEuY28udGgiLCJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJodHRwczovL2Rldi1wb3J0YWwudGhlMS5jby50aCJdLCJzY29wZSI6InByb2ZpbGUiLCJzaWQiOiI0MGUzNjg5My1lMTJhLTQ1NmUtOGEwZC02MmU4ZjY2OWRhM2EiLCJuYW1lIjoidGVzdGVycm9yMiB0ZXN0IiwiZ3JvdXBzIjpbXSwicHJlZmVycmVkX3VzZXJuYW1lIjoid2FuZGFtYXhpbW9mZiIsImdpdmVuX25hbWUiOiJ0ZXN0ZXJyb3IyIiwiZmFtaWx5X25hbWUiOiJ0ZXN0In0.LQ3MJb6UD6CQ4aFhiyoNjysHPKPPuRDNsylVLBjIlr2alovkMKEUN4vUPnEJI0Bu-hZLXM4QInROMzwIkgccLXxFPbOyH7qxTlHWK2zLmldKJZoY-qtVVWlVHT5jBl1FMKrojjYVqMQJtff8kBxCXcIoGJ-7x7JtMUIvRfmGu6abgFvThj8bRHzhpS1I1gyugrjvoPStgq-BuSAYq-dAO_RfEQ_5lHJ7hOTCvBLAx5nLZZ4ocmDH8ElHq8l9xJCtuxxqvHgvm-e1z83Ze3MXSG4Fd1KR6SGucclJ3BCv1Mw_Cc6r4_SpegKUSy56Y9K7OEPPk1KfIQcOvI7FJx8hfw
+                expiresIn: 28800
+                refreshExpiresIn: 36000
+                refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzZmVmZDhlNS00Y2I3LTQwMjktYmMyMC1kYTI3OGExN2YzMTkifQ.eyJleHAiOjE2Mjk3MjgwMTQsImlhdCI6MTYyOTY5MjAxNCwianRpIjoiZjI1MDg3MzItMWM0MS00NjFiLTgxODItZjc4MTBhNzg3NmRhIiwiaXNzIjoiaHR0cHM6Ly9kZXYta2V5Y2xvYWsudGhlMS5jby50aC9hdXRoL3JlYWxtcy9wb3J0YWwiLCJhdWQiOiJodHRwczovL2Rldi1rZXljbG9hay50aGUxLmNvLnRoL2F1dGgvcmVhbG1zL3BvcnRhbCIsInN1YiI6IjRmNzFhOWE1LTBmZTQtNGQ2Ni05MTdkLWY3MzM2ZDU0YTEwNiIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJwb3J0YWwtZnJvbnRlbmQiLCJzZXNzaW9uX3N0YXRlIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIiwic2NvcGUiOiJwcm9maWxlIiwic2lkIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIn0.nXwNohvOCrvNOmqxaSzoZX7m3km1cxFvQuHFAijwz6I
+                tokenType: Bearer
+                notBeforePolicy: '0'
+                sessionState: 40e36893-e12a-456e-8a0d-62e8f669da3a
+                scope: profile
+          examples:
+            example-1:
+              value:
+                accessToken: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmVlBKUld3dkhfY3N0NFVKTmJoWEFNSWw0U3NiUWtUQW9oM2dCOVB6dXkwIn0.eyJleHAiOjE2Mjk3MjA4MTQsImlhdCI6MTYyOTY5MjAxNCwianRpIjoiYmM2NzFlNTctYWE5Mi00NzQxLWE0YzgtZjg3MTJjZjA5YzA0IiwiaXNzIjoiaHR0cHM6Ly9kZXYta2V5Y2xvYWsudGhlMS5jby50aC9hdXRoL3JlYWxtcy9wb3J0YWwiLCJzdWIiOiI0ZjcxYTlhNS0wZmU0LTRkNjYtOTE3ZC1mNzMzNmQ1NGExMDYiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJwb3J0YWwtZnJvbnRlbmQiLCJzZXNzaW9uX3N0YXRlIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIiwiaHR0cHM6Ly9zaXQtcG9ydGFsLnRoZTEuY28udGgiLCJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJodHRwczovL2Rldi1wb3J0YWwudGhlMS5jby50aCJdLCJzY29wZSI6InByb2ZpbGUiLCJzaWQiOiI0MGUzNjg5My1lMTJhLTQ1NmUtOGEwZC02MmU4ZjY2OWRhM2EiLCJuYW1lIjoidGVzdGVycm9yMiB0ZXN0IiwiZ3JvdXBzIjpbXSwicHJlZmVycmVkX3VzZXJuYW1lIjoid2FuZGFtYXhpbW9mZiIsImdpdmVuX25hbWUiOiJ0ZXN0ZXJyb3IyIiwiZmFtaWx5X25hbWUiOiJ0ZXN0In0.LQ3MJb6UD6CQ4aFhiyoNjysHPKPPuRDNsylVLBjIlr2alovkMKEUN4vUPnEJI0Bu-hZLXM4QInROMzwIkgccLXxFPbOyH7qxTlHWK2zLmldKJZoY-qtVVWlVHT5jBl1FMKrojjYVqMQJtff8kBxCXcIoGJ-7x7JtMUIvRfmGu6abgFvThj8bRHzhpS1I1gyugrjvoPStgq-BuSAYq-dAO_RfEQ_5lHJ7hOTCvBLAx5nLZZ4ocmDH8ElHq8l9xJCtuxxqvHgvm-e1z83Ze3MXSG4Fd1KR6SGucclJ3BCv1Mw_Cc6r4_SpegKUSy56Y9K7OEPPk1KfIQcOvI7FJx8hfw
+                expiresIn: 28800
+                refreshExpiresIn: 36000
+                refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzZmVmZDhlNS00Y2I3LTQwMjktYmMyMC1kYTI3OGExN2YzMTkifQ.eyJleHAiOjE2Mjk3MjgwMTQsImlhdCI6MTYyOTY5MjAxNCwianRpIjoiZjI1MDg3MzItMWM0MS00NjFiLTgxODItZjc4MTBhNzg3NmRhIiwiaXNzIjoiaHR0cHM6Ly9kZXYta2V5Y2xvYWsudGhlMS5jby50aC9hdXRoL3JlYWxtcy9wb3J0YWwiLCJhdWQiOiJodHRwczovL2Rldi1rZXljbG9hay50aGUxLmNvLnRoL2F1dGgvcmVhbG1zL3BvcnRhbCIsInN1YiI6IjRmNzFhOWE1LTBmZTQtNGQ2Ni05MTdkLWY3MzM2ZDU0YTEwNiIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJwb3J0YWwtZnJvbnRlbmQiLCJzZXNzaW9uX3N0YXRlIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIiwic2NvcGUiOiJwcm9maWxlIiwic2lkIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIn0.nXwNohvOCrvNOmqxaSzoZX7m3km1cxFvQuHFAijwz6I
+                tokenType: Bearer
+                notBeforePolicy: '0'
+                sessionState: 40e36893-e12a-456e-8a0d-62e8f669da3a
+                scope: profile
+  requestBodies:
+    Authentication-Token:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                minLength: 1
+              password:
+                type: string
+                minLength: 1
+              type:
+                type: string
+                enum:
+                  - cg
+                  - non-cg
+            required:
+              - username
+              - password
+              - type
+          examples:
+            example-1:
+              value:
+                username: string
+                password: string
+                type: cg
+      description: ''
+    Authentication-Logout:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              refreshToken:
+                type: string
+                minLength: 1
+            required:
+              - refreshToken
+          examples:
+            example-1:
+              value:
+                refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzZmVmZDhlNS00Y2I3LTQwMjktYmMyMC1kYTI3OGExN2YzMTkifQ.eyJleHAiOjE2Mjk3MjgwMTQsImlhdCI6MTYyOTY5MjAxNCwianRpIjoiZjI1MDg3MzItMWM0MS00NjFiLTgxODItZjc4MTBhNzg3NmRhIiwiaXNzIjoiaHR0cHM6Ly9kZXYta2V5Y2xvYWsudGhlMS5jby50aC9hdXRoL3JlYWxtcy9wb3J0YWwiLCJhdWQiOiJodHRwczovL2Rldi1rZXljbG9hay50aGUxLmNvLnRoL2F1dGgvcmVhbG1zL3BvcnRhbCIsInN1YiI6IjRmNzFhOWE1LTBmZTQtNGQ2Ni05MTdkLWY3MzM2ZDU0YTEwNiIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJwb3J0YWwtZnJvbnRlbmQiLCJzZXNzaW9uX3N0YXRlIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIiwic2NvcGUiOiJwcm9maWxlIiwic2lkIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIn0.nXwNohvOCrvNOmqxaSzoZX7m3km1cxFvQuHFAijwz6I
+    Authentication-Refresh:
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            properties:
+              refresh_token:
+                type: string
+                minLength: 1
+            required:
+              - refresh_token
+            x-examples:
+              example-1:
+                refresh_token: '{{refresh-token}}'
+          examples:
+            example-1:
+              value:
+                refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzZmVmZDhlNS00Y2I3LTQwMjktYmMyMC1kYTI3OGExN2YzMTkifQ.eyJleHAiOjE2Mjk3MjgwMTQsImlhdCI6MTYyOTY5MzI4MiwianRpIjoiZmQ1ZWY0MDItZTQyYS00MDA1LTliYWYtZDQ0MTUxZDllY2QxIiwiaXNzIjoiaHR0cHM6Ly9kZXYta2V5Y2xvYWsudGhlMS5jby50aC9hdXRoL3JlYWxtcy9wb3J0YWwiLCJhdWQiOiJodHRwczovL2Rldi1rZXljbG9hay50aGUxLmNvLnRoL2F1dGgvcmVhbG1zL3BvcnRhbCIsInN1YiI6IjRmNzFhOWE1LTBmZTQtNGQ2Ni05MTdkLWY3MzM2ZDU0YTEwNiIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJwb3J0YWwtZnJvbnRlbmQiLCJzZXNzaW9uX3N0YXRlIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIiwic2NvcGUiOiJwcm9maWxlIiwic2lkIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIn0.jV5CecckxjSIHRE8hMdxE5nWuCKx4AmTzIGwdenn-Nw
