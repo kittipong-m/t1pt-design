@@ -16,7 +16,7 @@ paths:
   /auth/token:
     parameters: []
     post:
-      summary: ''
+      summary: Get Token
       operationId: post-auth-token
       responses:
         '200':
@@ -33,7 +33,7 @@ paths:
         $ref: '#/components/requestBodies/Authentication-Token'
   /auth/refresh_token:
     post:
-      summary: ''
+      summary: Refresh Token
       operationId: post-auth-refresh_token
       responses:
         '200':
@@ -48,7 +48,7 @@ paths:
         - Authentication
   /auth/logout:
     post:
-      summary: ''
+      summary: Logout
       operationId: post-auth-logout
       responses:
         '204':
