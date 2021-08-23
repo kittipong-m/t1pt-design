@@ -61,8 +61,111 @@ paths:
         $ref: '#/components/requestBodies/Authentication-Logout'
       tags:
         - Authentication
+  /editors_pick_list:
+    get:
+      summary: Get Schedules
+      tags:
+        - Editor's Pick
+      responses:
+        '200':
+          $ref: '#/components/responses/EditorsPick-List'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '500':
+          $ref: '#/components/responses/500-InternalServerError'
+        '502':
+          $ref: '#/components/responses/502-BadGateway'
+      operationId: get-editors_picks
+      parameters:
+        - $ref: '#/components/parameters/Pagination-Page'
+        - $ref: '#/components/parameters/Pagination-Limit'
+        - $ref: '#/components/parameters/EditorsPick-Sort'
+        - $ref: '#/components/parameters/EditorsPick-StartDateTime'
+        - $ref: '#/components/parameters/EditorsPick-EndDateTime'
+    parameters: []
 components:
-  schemas: {}
+  schemas:
+    Pagination:
+      title: Pagination
+      type: object
+      properties:
+        pageNumber:
+          type: integer
+          minimum: 0
+        pageSize:
+          type: integer
+          minimum: 0
+        totalElements:
+          type: integer
+          minimum: 0
+        totalPages:
+          type: integer
+          minimum: 0
+      required:
+        - pageNumber
+        - pageSize
+        - totalElements
+        - totalPages
+      examples:
+        - pageNumber: 0
+          pageSize: 0
+          totalElements: 0
+          totalPages: 0
+    EditorsPick-Schedule:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          id: 2
+          editorPickBannerCount: 1
+          editorPickListCount: 1
+          startDateTime: '2021-08-17T21:06:14Z'
+          createdDate: '2021-08-17T21:06:14Z'
+          updatedDate: '2021-08-17T21:06:14Z'
+      examples:
+        - id: 1
+          editorPickBannerCount: 1
+          editorPickListCount: 1
+          startDateTime: '2019-08-24T14:15:22Z'
+          createdDate: '2019-08-24T14:15:22Z'
+          updatedDate: '2019-08-24T14:15:22Z'
+        - id: 2
+          editorPickBannerCount: 3
+          editorPickListCount: 3
+          startDateTime: '2020-08-24T14:15:22Z'
+          createdDate: '2020-08-24T14:15:22Z'
+          updatedDate: '2020-08-24T14:15:22Z'
+      properties:
+        id:
+          type: number
+          minimum: 1
+        editorPickBannerCount:
+          type: number
+          minimum: 0
+        editorPickListCount:
+          type: number
+          minimum: 0
+        startDateTime:
+          type: string
+          minLength: 1
+          format: date-time
+        createdDate:
+          type: string
+          minLength: 1
+          format: date-time
+        updatedDate:
+          type: string
+          minLength: 1
+          format: date-time
+      required:
+        - id
+        - editorPickBannerCount
+        - editorPickListCount
+        - startDateTime
+        - createdDate
+        - updatedDate
   securitySchemes:
     Authorization:
       type: oauth2
@@ -215,7 +318,7 @@ components:
                 data: null
             example-2:
               value:
-                successful: true
+                successful: false
                 code: '09'
                 message: Field id must be positive integer
                 data: null
@@ -314,6 +417,148 @@ components:
                 notBeforePolicy: '0'
                 sessionState: 40e36893-e12a-456e-8a0d-62e8f669da3a
                 scope: profile
+    EditorsPick-List:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: false
+                code: string
+                message: Internal Server Error
+                data:
+                  schedules:
+                    - id: 2
+                      editorPickBannerCount: 1
+                      editorPickListCount: 1
+                      startDateTime: '2021-08-17T21:06:14Z'
+                      createdDate: '2021-08-17T21:06:14Z'
+                      updatedDate: '2021-08-17T21:06:14Z'
+                    - id: 3
+                      editorPickBannerCount: 1
+                      editorPickListCount: 1
+                      startDateTime: '2021-08-17T23:28:37Z'
+                      createdDate: '2021-08-17T23:28:37Z'
+                      updatedDate: '2021-08-17T23:28:37Z'
+                  currentSchedules:
+                    id: 4
+                    editorPickBannerCount: 1
+                    editorPickListCount: 1
+                    startDateTime: '2021-08-18T03:32:55Z'
+                    createdDate: '2021-08-18T03:32:55Z'
+                    updatedDate: '2021-08-18T03:32:55Z'
+                  pagination:
+                    pageNumber: 0
+                    pageSize: 10
+                    totalElements: 2
+                    totalPages: 1
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                required:
+                  - pagination
+                  - schedules
+                properties:
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  schedules:
+                    type: array
+                    uniqueItems: true
+                    minItems: 0
+                    items:
+                      $ref: '#/components/schemas/EditorsPick-Schedule'
+                  currentSchedule:
+                    $ref: '#/components/schemas/EditorsPick-Schedule'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  pagination:
+                    pageNumber: 1
+                    pageSize: 20
+                    totalElements: 1
+                    totalPages: 1
+                  schedules:
+                    - id: 1
+                      editorPickBannerCount: 1
+                      editorPickListCount: 1
+                      startDateTime: '2019-08-24T14:15:22Z'
+                      createdDate: '2019-08-24T14:15:22Z'
+                      updatedDate: '2019-08-24T14:15:22Z'
+                  currentSchedule:
+                    id: 1
+                    editorPickBannerCount: 1
+                    editorPickListCount: 1
+                    startDateTime: '2019-08-24T14:15:22Z'
+                    createdDate: '2019-08-24T14:15:22Z'
+                    updatedDate: '2019-08-24T14:15:22Z'
+            example-2:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  pagination:
+                    pageNumber: 0
+                    pageSize: 0
+                    totalElements: 0
+                    totalPages: 0
+                  schedules: []
+                  currentSchedule: null
+    502-BadGateway:
+      description: Bad Gateway (received an invalid response from another server)
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: false
+                code: string
+                message: Internal Server Error
+                data: null
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: false
+                code: '50'
+                message: Bad Gateway
+                data: null
   requestBodies:
     Authentication-Token:
       content:
@@ -377,3 +622,46 @@ components:
             example-1:
               value:
                 refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzZmVmZDhlNS00Y2I3LTQwMjktYmMyMC1kYTI3OGExN2YzMTkifQ.eyJleHAiOjE2Mjk3MjgwMTQsImlhdCI6MTYyOTY5MzI4MiwianRpIjoiZmQ1ZWY0MDItZTQyYS00MDA1LTliYWYtZDQ0MTUxZDllY2QxIiwiaXNzIjoiaHR0cHM6Ly9kZXYta2V5Y2xvYWsudGhlMS5jby50aC9hdXRoL3JlYWxtcy9wb3J0YWwiLCJhdWQiOiJodHRwczovL2Rldi1rZXljbG9hay50aGUxLmNvLnRoL2F1dGgvcmVhbG1zL3BvcnRhbCIsInN1YiI6IjRmNzFhOWE1LTBmZTQtNGQ2Ni05MTdkLWY3MzM2ZDU0YTEwNiIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJwb3J0YWwtZnJvbnRlbmQiLCJzZXNzaW9uX3N0YXRlIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIiwic2NvcGUiOiJwcm9maWxlIiwic2lkIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIn0.jV5CecckxjSIHRE8hMdxE5nWuCKx4AmTzIGwdenn-Nw
+  parameters:
+    EditorsPick-Sort:
+      name: sort
+      in: query
+      schema:
+        type: string
+        minimum: 1
+        minLength: 1
+        example: 'startDateTime,asc'
+      description: field and direction to sort items
+    Pagination-Page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      description: The number of page to skip before starting to collect the result
+    Pagination-Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+      description: The number of items to return
+    EditorsPick-StartDateTime:
+      name: startDateTime
+      in: query
+      schema:
+        type: string
+        format: date-time
+        minLength: 1
+    EditorsPick-EndDateTime:
+      name: endDateTime
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date-time
+        minLength: 1
