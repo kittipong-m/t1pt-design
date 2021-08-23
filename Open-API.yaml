@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: The1 Portal API
   version: '1.0'
-  description: ''
+  description: The1 Portal API Specification
 servers:
   - url: 'http://localhost:3000/v1'
     description: Local
@@ -27,10 +27,10 @@ paths:
           $ref: '#/components/responses/401-Unauthorized'
         '404':
           $ref: '#/components/responses/404-DataNotFound'
-      tags:
-        - Authentication
       requestBody:
         $ref: '#/components/requestBodies/Authentication-Token'
+      tags:
+        - Authentication
   /auth/refresh_token:
     post:
       summary: Refresh Token
@@ -64,8 +64,6 @@ paths:
   /editors_pick_list:
     get:
       summary: Get Schedules
-      tags:
-        - Editor's Pick
       responses:
         '200':
           $ref: '#/components/responses/EditorsPick-List'
@@ -73,6 +71,8 @@ paths:
           $ref: '#/components/responses/400-BadRequest'
         '401':
           $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
         '500':
           $ref: '#/components/responses/500-InternalServerError'
         '502':
@@ -84,7 +84,18 @@ paths:
         - $ref: '#/components/parameters/EditorsPick-Sort'
         - $ref: '#/components/parameters/EditorsPick-StartDateTime'
         - $ref: '#/components/parameters/EditorsPick-EndDateTime'
+      tags:
+        - Editor's Pick
     parameters: []
+  /create_company:
+    post:
+      summary: Create Company
+      operationId: post-create_company
+      responses:
+        '200':
+          description: OK
+      tags:
+        - Company
 components:
   schemas:
     Pagination:
@@ -166,6 +177,76 @@ components:
         - startDateTime
         - createdDate
         - updatedDate
+    Company:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          companyId: 1
+          companyNameEn: 'Primo World CO.,LTD'
+          companyNameTh: บริษัท พรีโม่ จำกัด
+          companyTypeId: 3
+          companyCategoryId: 1
+          companySizeId: 1
+          status: 1
+          statusDesc: Draft
+          assignee: Primo_Admin
+          createdBy: Primo_Admin
+          createdAt: '2021-01-31T00:00:00Z'
+      examples:
+        - companyId: 1
+          companyNameEn: 'Primo World CO.,LTD'
+          companyNameTh: บริษัท พรีโม่ จำกัด
+          companyTypeId: 1
+          companyCategoryId: 1
+          companySizeId: 1
+          status: 1
+          statusDesc: Draft
+          assignee: Primo_Admin
+          createdBy: Primo_Admin
+          createdAt: '2019-08-24T14:15:22Z'
+      properties:
+        companyId:
+          type: number
+        companyNameEn:
+          type: string
+          minLength: 1
+        companyNameTh:
+          type: string
+          minLength: 1
+        companyTypeId:
+          type: number
+        companyCategoryId:
+          type: number
+        companySizeId:
+          type: number
+        status:
+          type: number
+        statusDesc:
+          type: string
+          minLength: 1
+        assignee:
+          type: string
+          minLength: 1
+        createdBy:
+          type: string
+          minLength: 1
+        createdAt:
+          type: string
+          minLength: 1
+          format: date-time
+      required:
+        - companyId
+        - companyNameEn
+        - companyNameTh
+        - companyTypeId
+        - companyCategoryId
+        - companySizeId
+        - status
+        - statusDesc
+        - assignee
+        - createdBy
+        - createdAt
   securitySchemes:
     Authorization:
       type: oauth2
@@ -559,6 +640,52 @@ components:
                 code: '50'
                 message: Bad Gateway
                 data: null
+    Company-Create:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: false
+                code: '06'
+                message: Missing require field
+                data: null
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                $ref: '#/components/schemas/Company'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  companyId: 1
+                  companyNameEn: 'Primo World CO.,LTD'
+                  companyNameTh: บริษัท พรีโม่ จำกัด
+                  companyTypeId: 1
+                  companyCategoryId: 1
+                  companySizeId: 1
+                  status: 1
+                  statusDesc: Draft
+                  assignee: Primo_Admin
+                  createdBy: Primo_Admin
+                  createdAt: '2019-08-24T14:15:22Z'
   requestBodies:
     Authentication-Token:
       content:
@@ -665,3 +792,7 @@ components:
         type: string
         format: date-time
         minLength: 1
+tags:
+  - name: Authentication
+  - name: Company
+  - name: Editor's Pick
