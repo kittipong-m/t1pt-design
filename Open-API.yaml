@@ -318,6 +318,17 @@ paths:
         '200':
           $ref: '#/components/responses/Article-ListCategories'
       operationId: get-list_categories
+  /get_category:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Article
+      responses:
+        '200':
+          $ref: '#/components/responses/Article-GetCategory'
+      operationId: get-get_category
+      parameters:
+        - $ref: '#/components/parameters/Article-CategoryId'
 components:
   schemas:
     Pagination:
@@ -1852,6 +1863,59 @@ components:
                       slug: horoscope
                       ordered: 2
                       display: true
+    Article-GetCategory:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
+                code: string
+                message: string
+                data:
+                  categories:
+                    - id: 1
+                      nameTh: ดูดวง
+                      nameEn: Horoscope
+                      imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+                      imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+                      slug: horoscope
+                      ordered: 2
+                      display: true
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                $ref: '#/components/schemas/ArticleCategory'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: string
+                message: string
+                data:
+                  id: 1
+                  nameTh: ดูดวง
+                  nameEn: Horoscope
+                  imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+                  imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+                  slug: horoscope
+                  ordered: 2
+                  display: true
   requestBodies:
     Authentication-Token:
       content:
@@ -2359,6 +2423,12 @@ components:
       required: false
       schema:
         type: string
+    Article-CategoryId:
+      name: categoryId
+      in: query
+      required: true
+      schema:
+        type: integer
 tags:
   - name: Article
   - name: Authentication
