@@ -106,7 +106,7 @@ paths:
         $ref: '#/components/requestBodies/Company-Create'
   /list_company_type:
     get:
-      summary: List Company Type
+      summary: Get Company Types
       tags:
         - Company
       responses:
@@ -115,7 +115,7 @@ paths:
       operationId: get-list_company_type
   /list_company_size:
     get:
-      summary: List Company Size
+      summary: Get Company Sizes
       tags:
         - Company
       responses:
@@ -124,7 +124,7 @@ paths:
       operationId: get-list_company_size
   /list_company_category:
     get:
-      summary: List Company Category
+      summary: Get Company Categories
       tags:
         - Company
       responses:
@@ -144,14 +144,35 @@ paths:
         $ref: '#/components/requestBodies/Company-Submit'
   /get_company:
     get:
-      summary: Get Company
-      tags: []
+      summary: Get Company by ID
+      tags:
+        - Company
       responses:
         '200':
           $ref: '#/components/responses/Company-Create'
       operationId: get-get_company
       parameters:
         - $ref: '#/components/parameters/Company-Id'
+  /list_company:
+    get:
+      summary: Get Companies
+      tags:
+        - Company
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-ListCompany'
+      operationId: get-list_company
+      parameters:
+        - $ref: '#/components/parameters/Pagination-Limit'
+        - $ref: '#/components/parameters/Pagination-Page'
+        - $ref: '#/components/parameters/Company-TypeId'
+        - $ref: '#/components/parameters/Company-CategoryId'
+        - $ref: '#/components/parameters/Company-SizeId'
+        - $ref: '#/components/parameters/Status-Id'
+        - $ref: '#/components/parameters/Pagination-KeywordOf'
+        - $ref: '#/components/parameters/Pagination-Keyword'
+        - $ref: '#/components/parameters/Pagination-SortBy'
+        - $ref: '#/components/parameters/Pagination-SortDirection'
 components:
   schemas:
     Pagination:
@@ -984,6 +1005,79 @@ components:
                     - companyCategoryId: 1
                       companyCategoryEn: string
                       companyCategoryTh: string
+    Company-ListCompany:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  companyType:
+                    - companyTypeId: 1
+                      companyTypeEn: string
+                      companyTypeTh: string
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                required:
+                  - company
+                  - currentPage
+                  - totalPage
+                  - total
+                properties:
+                  company:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      $ref: '#/components/schemas/Company'
+                  currentPage:
+                    type: integer
+                  totalPage:
+                    type: integer
+                  total:
+                    type: integer
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: string
+                message: string
+                data:
+                  company:
+                    - companyId: 1
+                      companyNameEn: 'Primo World CO.,LTD'
+                      companyNameTh: บริษัท พรีโม่ จำกัด
+                      companyTypeId: 1
+                      companyCategoryId: 1
+                      companySizeId: 1
+                      status: 1
+                      statusDesc: Draft
+                      assignee: Primo_Admin
+                      createdBy: Primo_Admin
+                      createdAt: '2019-08-24T14:15:22Z'
+                  currentPage: 1
+                  totalPage: 1
+                  total: 1
   requestBodies:
     Authentication-Token:
       content:
@@ -1124,7 +1218,7 @@ components:
       schema:
         type: integer
         minimum: 0
-        default: 0
+        default: 1
       description: The number of page to skip before starting to collect the result
     Pagination-Limit:
       name: limit
@@ -1133,7 +1227,7 @@ components:
       schema:
         type: integer
         minimum: 0
-        default: 0
+        default: 10
       description: The number of items to return
     EditorsPick-StartDateTime:
       name: startDateTime
@@ -1153,10 +1247,61 @@ components:
     Company-Id:
       name: companyId
       in: query
-      required: true
       schema:
         type: integer
         minimum: 1
+    Company-TypeId:
+      name: companyTypeId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+    Company-CategoryId:
+      name: companyCategoryId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+    Company-SizeId:
+      name: companySizeId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+    Status-Id:
+      name: statusId
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+    Pagination-KeywordOf:
+      name: keywordOf
+      in: query
+      required: false
+      schema:
+        type: string
+    Pagination-Keyword:
+      name: keyword
+      in: query
+      required: false
+      schema:
+        type: string
+    Pagination-SortBy:
+      name: sortBy
+      in: query
+      required: false
+      schema:
+        type: string
+    Pagination-SortDirection:
+      name: sortDirection
+      in: query
+      required: false
+      schema:
+        type: string
 tags:
   - name: Article
   - name: Authentication
