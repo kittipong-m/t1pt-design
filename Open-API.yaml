@@ -209,6 +209,17 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/Company-CheckBelongTo'
+  /get_onboard_step:
+    get:
+      summary: Get Onboard Step
+      tags:
+        - Company
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-OnboardStep'
+      operationId: get-get_onboard_step
+      parameters:
+        - $ref: '#/components/parameters/Company-Id'
 components:
   schemas:
     Pagination:
@@ -1157,6 +1168,63 @@ components:
                 message: Successful
                 data:
                   belongTo: true
+    Company-OnboardStep:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  belongTo: true
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                required:
+                  - companyId
+                  - currentStep
+                  - nextStep
+                properties:
+                  companyId:
+                    type: integer
+                  brandId:
+                    type: integer
+                  branchId:
+                    type: integer
+                  currentStep:
+                    type: integer
+                  nextStep:
+                    type: integer
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  companyId: 1
+                  brandId: 1
+                  branchId: 1
+                  currentStep: 0
+                  nextStep: 1
   requestBodies:
     Authentication-Token:
       content:
@@ -1395,6 +1463,7 @@ components:
       schema:
         type: integer
         minimum: 1
+      required: true
     Company-TypeId:
       name: companyTypeId
       in: query
