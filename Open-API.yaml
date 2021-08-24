@@ -294,7 +294,7 @@ paths:
         - Article
       responses:
         '200':
-          $ref: '#/components/responses/Article-ListTopic'
+          $ref: '#/components/responses/Article-ListTopics'
       operationId: get-list_topics
       parameters:
         - $ref: '#/components/parameters/Article-TopicName'
@@ -309,6 +309,15 @@ paths:
         $ref: '#/components/requestBodies/Article-Delete'
       tags:
         - Article
+  /list_categories:
+    get:
+      summary: Get Categories
+      tags:
+        - Article
+      responses:
+        '200':
+          $ref: '#/components/responses/Article-ListCategories'
+      operationId: get-list_categories
 components:
   schemas:
     Pagination:
@@ -1745,7 +1754,7 @@ components:
                   expireDate: '2019-08-24T14:15:22Z'
                   deepLinkUri: string
                   deepLinkUrl: string
-    Article-ListTopic:
+    Article-ListTopics:
       description: Example response
       content:
         application/json:
@@ -1770,9 +1779,12 @@ components:
                 type: string
                 minLength: 1
               data:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ArticleTopic'
+                type: object
+                properties:
+                  topics:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ArticleTopic'
             required:
               - successful
               - code
@@ -1782,11 +1794,64 @@ components:
             example-1:
               value:
                 successful: true
+                code: string
+                message: string
+                data:
+                  topics:
+                    - id: 1
+                      name: Street Food
+    Article-ListCategories:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
                 code: '00'
                 message: Successful
                 data:
                   - id: 1
                     name: Street Food
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ArticleCategory'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: string
+                message: string
+                data:
+                  categories:
+                    - id: 1
+                      nameTh: ดูดวง
+                      nameEn: Horoscope
+                      imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+                      imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+                      slug: horoscope
+                      ordered: 2
+                      display: true
   requestBodies:
     Authentication-Token:
       content:
