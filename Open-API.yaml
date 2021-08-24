@@ -220,6 +220,17 @@ paths:
       operationId: get-get_onboard_step
       parameters:
         - $ref: '#/components/parameters/Company-Id'
+  /set_onboard_step:
+    post:
+      summary: Set Onboard Step
+      operationId: post-set_onboard_step
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-SetOnboardStep'
+      tags:
+        - Company
+      requestBody:
+        $ref: '#/components/requestBodies/Company-SetOnboardStep'
 components:
   schemas:
     Pagination:
@@ -1225,6 +1236,54 @@ components:
                   branchId: 1
                   currentStep: 0
                   nextStep: 1
+    Company-SetOnboardStep:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                properties:
+                  currentStep:
+                    type: number
+                  nextStep:
+                    type: number
+                required:
+                  - currentStep
+                  - nextStep
+            required:
+              - successful
+              - code
+              - message
+              - data
+            x-examples:
+              example-1:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  currentStep: 0
+                  nextStep: 1
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  currentStep: 0
+                  nextStep: 1
   requestBodies:
     Authentication-Token:
       content:
@@ -1414,6 +1473,26 @@ components:
                 minimum: 1
             required:
               - companyId
+    Company-SetOnboardStep:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyId:
+                type: integer
+                minimum: 1
+              currentStep:
+                type: integer
+                minimum: 1
+            required:
+              - companyId
+              - currentStep
+          examples:
+            example-1:
+              value:
+                companyId: 1
+                currentStep: 1
   parameters:
     EditorsPick-Sort:
       name: sort
