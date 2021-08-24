@@ -93,9 +93,17 @@ paths:
       operationId: post-create_company
       responses:
         '200':
-          description: OK
+          $ref: '#/components/responses/Company-Create'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          description: Unauthorized
+        '422':
+          $ref: '#/components/responses/422-C07-CompanyDuplicated'
       tags:
         - Company
+      requestBody:
+        $ref: '#/components/requestBodies/Company-Create'
 components:
   schemas:
     Pagination:
@@ -247,6 +255,7 @@ components:
         - assignee
         - createdBy
         - createdAt
+      title: ''
   securitySchemes:
     Authorization:
       type: oauth2
@@ -686,6 +695,41 @@ components:
                   assignee: Primo_Admin
                   createdBy: Primo_Admin
                   createdAt: '2019-08-24T14:15:22Z'
+    422-C07-CompanyDuplicated:
+      description: Company name is duplicated
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: false
+                code: '04'
+                message: Data not found
+                data: null
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: false
+                code: '07'
+                message: Company name is duplicated
+                data: null
   requestBodies:
     Authentication-Token:
       content:
@@ -749,6 +793,51 @@ components:
             example-1:
               value:
                 refresh_token: eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzZmVmZDhlNS00Y2I3LTQwMjktYmMyMC1kYTI3OGExN2YzMTkifQ.eyJleHAiOjE2Mjk3MjgwMTQsImlhdCI6MTYyOTY5MzI4MiwianRpIjoiZmQ1ZWY0MDItZTQyYS00MDA1LTliYWYtZDQ0MTUxZDllY2QxIiwiaXNzIjoiaHR0cHM6Ly9kZXYta2V5Y2xvYWsudGhlMS5jby50aC9hdXRoL3JlYWxtcy9wb3J0YWwiLCJhdWQiOiJodHRwczovL2Rldi1rZXljbG9hay50aGUxLmNvLnRoL2F1dGgvcmVhbG1zL3BvcnRhbCIsInN1YiI6IjRmNzFhOWE1LTBmZTQtNGQ2Ni05MTdkLWY3MzM2ZDU0YTEwNiIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJwb3J0YWwtZnJvbnRlbmQiLCJzZXNzaW9uX3N0YXRlIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIiwic2NvcGUiOiJwcm9maWxlIiwic2lkIjoiNDBlMzY4OTMtZTEyYS00NTZlLThhMGQtNjJlOGY2NjlkYTNhIn0.jV5CecckxjSIHRE8hMdxE5nWuCKx4AmTzIGwdenn-Nw
+    Company-Create:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyNameEn:
+                type: string
+                minLength: 1
+                pattern: '^[\w\s.,&+@\)\(-]+$'
+                maxLength: 255
+              companyNameTh:
+                type: string
+                pattern: '^[ก-๛0-9.,&+@\s\)\(_-]+$'
+                minLength: 1
+                maxLength: 255
+              companyTypeId:
+                type: integer
+                description: cannot create with company type == 1 (all company)
+                minimum: 2
+              companyCategoryId:
+                type: integer
+                minimum: 1
+                description: '`required if company type id == 3 (partner)`'
+              companySizeId:
+                type: integer
+                minimum: 1
+                description: '`required if company type id == 3 (partner)`'
+              assignee:
+                type: string
+                minLength: 1
+                description: '`required if company type id == 3 (partner)`'
+            required:
+              - companyNameEn
+              - companyNameTh
+              - companyTypeId
+          examples:
+            example-1:
+              value:
+                companyNameEn: Example
+                companyNameTh: ตัวอย่าง
+                companyTypeId: 2
+                companyCategoryId: 1
+                companySizeId: 1
+                assignee: admin
   parameters:
     EditorsPick-Sort:
       name: sort
@@ -793,6 +882,12 @@ components:
         format: date-time
         minLength: 1
 tags:
+  - name: Article
   - name: Authentication
+  - name: Branch
+  - name: Brand
   - name: Company
   - name: Editor's Pick
+  - name: Partner
+  - name: Role
+  - name: User
