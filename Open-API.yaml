@@ -261,6 +261,19 @@ paths:
         - $ref: '#/components/parameters/Article-StatusId'
         - $ref: '#/components/parameters/Pagination-SortBy'
         - $ref: '#/components/parameters/Pagination-SortDirection'
+  /get_article:
+    get:
+      summary: Get Article by ID
+      tags:
+        - Article
+      responses:
+        '200':
+          $ref: '#/components/responses/Article-Create'
+        '502':
+          $ref: '#/components/responses/502-BadGateway'
+      operationId: get-get_article
+      parameters:
+        - $ref: '#/components/parameters/Article-Id'
 components:
   schemas:
     Pagination:
@@ -1605,6 +1618,98 @@ components:
                       expireDate: '2019-08-24T14:15:22Z'
                       deepLinkUri: string
                       deepLinkUrl: string
+    Article-Create:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  currentPage: 1
+                  totalPage: 1
+                  total: 1
+                  articles:
+                    - id: 1
+                      titleTh: string
+                      titleEn: string
+                      publishDate: '2019-08-24T14:15:22Z'
+                      status: string
+                      categories:
+                        - id: 1
+                          nameTh: ดูดวง
+                          nameEn: Horoscope
+                          imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+                          imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+                          slug: horoscope
+                          ordered: 2
+                          display: true
+                      publisher:
+                        id: 1
+                        nameTh: สยามเซ็นเตอร์
+                        nameEn: Siam Center
+                        logo: 'https://www.example.co.th/publisher/images/siam001_1629289490736_Logo'
+                      topics:
+                        - id: 1
+                          name: Street Food
+                      template: string
+                      expireDate: '2019-08-24T14:15:22Z'
+                      deepLinkUri: string
+                      deepLinkUrl: string
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                $ref: '#/components/schemas/Article'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  id: 1
+                  titleTh: string
+                  titleEn: string
+                  publishDate: '2019-08-24T14:15:22Z'
+                  status: string
+                  categories:
+                    - id: 1
+                      nameTh: ดูดวง
+                      nameEn: Horoscope
+                      imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+                      imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+                      slug: horoscope
+                      ordered: 2
+                      display: true
+                  publisher:
+                    id: 1
+                    nameTh: สยามเซ็นเตอร์
+                    nameEn: Siam Center
+                    logo: 'https://www.example.co.th/publisher/images/siam001_1629289490736_Logo'
+                  topics:
+                    - id: 1
+                      name: Street Food
+                  template: string
+                  expireDate: '2019-08-24T14:15:22Z'
+                  deepLinkUri: string
+                  deepLinkUrl: string
   requestBodies:
     Authentication-Token:
       content:
@@ -1982,6 +2087,13 @@ components:
       required: false
       schema:
         type: integer
+    Article-Id:
+      name: articleId
+      in: query
+      required: true
+      schema:
+        type: integer
+        minimum: 1
 tags:
   - name: Article
   - name: Authentication
