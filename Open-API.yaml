@@ -104,6 +104,15 @@ paths:
         - Company
       requestBody:
         $ref: '#/components/requestBodies/Company-Create'
+  /list_company_type:
+    get:
+      summary: List Company Type
+      tags:
+        - Company
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-ListCompanyType'
+      operationId: get-list_company_type
 components:
   schemas:
     Pagination:
@@ -256,6 +265,20 @@ components:
         - createdBy
         - createdAt
       title: ''
+    CompanyType:
+      title: CompanyType
+      type: object
+      examples:
+        - companyTypeId: 1
+          companyTypeEn: string
+          companyTypeTh: string
+      properties:
+        companyTypeId:
+          type: integer
+        companyTypeEn:
+          type: string
+        companyTypeTh:
+          type: string
   securitySchemes:
     Authorization:
       type: oauth2
@@ -730,6 +753,64 @@ components:
                 code: '07'
                 message: Company name is duplicated
                 data: null
+    Company-ListCompanyType:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  companyId: 1
+                  companyNameEn: 'Primo World CO.,LTD'
+                  companyNameTh: บริษัท พรีโม่ จำกัด
+                  companyTypeId: 1
+                  companyCategoryId: 1
+                  companySizeId: 1
+                  status: 1
+                  statusDesc: Draft
+                  assignee: Primo_Admin
+                  createdBy: Primo_Admin
+                  createdAt: '2019-08-24T14:15:22Z'
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                required:
+                  - companyType
+                properties:
+                  companyType:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CompanyType'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: string
+                message: string
+                data:
+                  companyType:
+                    - companyTypeId: 1
+                      companyTypeEn: string
+                      companyTypeTh: string
   requestBodies:
     Authentication-Token:
       content:
