@@ -173,6 +173,17 @@ paths:
         - $ref: '#/components/parameters/Pagination-Keyword'
         - $ref: '#/components/parameters/Pagination-SortBy'
         - $ref: '#/components/parameters/Pagination-SortDirection'
+  /update_company:
+    post:
+      summary: Update Company
+      operationId: post-update_company
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-Create'
+      tags:
+        - Company
+      requestBody:
+        $ref: '#/components/requestBodies/Company-Update'
 components:
   schemas:
     Pagination:
@@ -1201,6 +1212,60 @@ components:
             example-1:
               value:
                 companyId: 1
+    Company-Update:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyId:
+                type: integer
+                minimum: 1
+              companyNameEn:
+                type: string
+                minLength: 1
+                pattern: '^[\w\s.,&+@\)\(-]+$'
+                maxLength: 255
+              companyNameTh:
+                type: string
+                pattern: '^[ก-๛0-9.,&+@\s\)\(_-]+$'
+                minLength: 1
+                maxLength: 255
+              companyTypeId:
+                type: integer
+                description: cannot create with company type == 1 (all company)
+                minimum: 2
+                maximum: 3
+              companyCategoryId:
+                type: integer
+                minimum: 1
+                description: '`required if company type id == 3 (partner)`'
+              companySizeId:
+                type: integer
+                minimum: 1
+                description: '`required if company type id == 3 (partner)`'
+              assignee:
+                type: string
+                minLength: 1
+                description: '`required if company type id == 3 (partner)`'
+              statusId:
+                type: integer
+                minimum: 1
+                maximum: 5
+            required:
+              - companyId
+              - companyNameEn
+              - companyNameTh
+              - companyTypeId
+          examples:
+            example-1:
+              value:
+                companyNameEn: Example
+                companyNameTh: ตัวอย่าง
+                companyTypeId: 2
+                companyCategoryId: 1
+                companySizeId: 1
+                assignee: admin
   parameters:
     EditorsPick-Sort:
       name: sort
