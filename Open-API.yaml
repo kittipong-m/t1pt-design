@@ -113,6 +113,14 @@ paths:
         '200':
           $ref: '#/components/responses/Company-ListCompanyType'
       operationId: get-list_company_type
+  /list_company_size:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-ListCompanySize'
+      operationId: get-list_company_size
 components:
   schemas:
     Pagination:
@@ -279,6 +287,20 @@ components:
           type: string
         companyTypeTh:
           type: string
+    CompanySize:
+      title: CompanySize
+      type: object
+      properties:
+        companySizeId:
+          type: integer
+        companySizeEn:
+          type: string
+        companySizeTh:
+          type: string
+      examples:
+        - companySizeId: 1
+          companySizeEn: string
+          companySizeTh: string
   securitySchemes:
     Authorization:
       type: oauth2
@@ -811,6 +833,59 @@ components:
                     - companyTypeId: 1
                       companyTypeEn: string
                       companyTypeTh: string
+    Company-ListCompanySize:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
+                code: string
+                message: string
+                data:
+                  companyType:
+                    - companyTypeId: 1
+                      companyTypeEn: string
+                      companyTypeTh: string
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                required:
+                  - companyType
+                properties:
+                  companyType:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      $ref: '#/components/schemas/CompanySize'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: string
+                message: string
+                data:
+                  companyType:
+                    - companySizeId: 1
+                      companySizeEn: string
+                      companySizeTh: string
   requestBodies:
     Authentication-Token:
       content:
