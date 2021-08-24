@@ -242,6 +242,25 @@ paths:
         - Company
       requestBody:
         $ref: '#/components/requestBodies/Company-UpdateStatus'
+  /list_articles:
+    get:
+      summary: Get Articles
+      tags:
+        - Article
+      responses:
+        '200':
+          $ref: '#/components/responses/Article-ListArticles'
+        '502':
+          $ref: '#/components/responses/502-BadGateway'
+      operationId: get-list_articles
+      parameters:
+        - $ref: '#/components/parameters/Pagination-Limit'
+        - $ref: '#/components/parameters/Pagination-Page'
+        - $ref: '#/components/parameters/Article-Title'
+        - $ref: '#/components/parameters/Article-Author'
+        - $ref: '#/components/parameters/Article-StatusId'
+        - $ref: '#/components/parameters/Pagination-SortBy'
+        - $ref: '#/components/parameters/Pagination-SortDirection'
 components:
   schemas:
     Pagination:
@@ -436,6 +455,152 @@ components:
         - companyCategoryId: 1
           companyCategoryEn: string
           companyCategoryTh: string
+    Article:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          id: 886
+          titleTh: อย. เผยรายชื่อ “ฟ้าทะลายโจร” ผิดกฎหมายเพิ่มอีก 11 รายการ
+          titleEn: อย. เผยรายชื่อ “ฟ้าทะลายโจร” ผิดกฎหมายเพิ่มอีก 11 รายการ
+          publishDate: '2021-08-19T12:20:08Z'
+          status: unpublished
+          publisher:
+            id: 55
+            nameTh: สยามเซ็นเตอร์
+            nameEn: Siam Center
+            logo: 'https://np-static.the1.co.th/media/publisher//images/siam001_1629289490736_Logo'
+          template: normal
+          expireDate: '3000-12-30T17:00:00Z'
+          deepLinkUri: 'the1://the1today/articles/886'
+          deepLinkUrl: 'https://www.the1.co.th/the1today/articles/886'
+      properties:
+        id:
+          type: number
+          minimum: 1
+        titleTh:
+          type: string
+          minLength: 1
+        titleEn:
+          type: string
+          minLength: 1
+        publishDate:
+          type: string
+          minLength: 1
+          format: date-time
+        status:
+          type: string
+          minLength: 1
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleCategory'
+        publisher:
+          $ref: '#/components/schemas/ArticlePublisher'
+        topics:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleTopic'
+        template:
+          type: string
+          minLength: 1
+        expireDate:
+          type: string
+          minLength: 1
+          format: date-time
+        deepLinkUri:
+          type: string
+          minLength: 1
+        deepLinkUrl:
+          type: string
+          minLength: 1
+      required:
+        - id
+        - titleTh
+        - titleEn
+        - publishDate
+        - status
+        - template
+        - expireDate
+        - deepLinkUri
+        - deepLinkUrl
+    ArticlePublisher:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          id: 55
+          nameTh: สยามเซ็นเตอร์
+          nameEn: Siam Center
+          logo: 'https://np-static.the1.co.th/media/publisher//images/siam001_1629289490736_Logo'
+      examples:
+        - id: 1
+          nameTh: สยามเซ็นเตอร์
+          nameEn: Siam Center
+          logo: 'https://www.example.co.th/publisher/images/siam001_1629289490736_Logo'
+      properties:
+        id:
+          type: number
+        nameTh:
+          type: string
+        nameEn:
+          type: string
+        logo:
+          type: string
+    ArticleTopic:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          id: 1
+          name: streetfood
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+      examples:
+        - id: 1
+          name: Street Food
+    ArticleCategory:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          id: 1
+          nameTh: ดูดวง
+          nameEn: Horoscope
+          imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+          imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+          slug: horoscope
+          ordered: 2
+          display: true
+      examples:
+        - id: 1
+          nameTh: ดูดวง
+          nameEn: Horoscope
+          imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+          imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+          slug: horoscope
+          ordered: 2
+          display: true
+      properties:
+        id:
+          type: number
+        nameTh:
+          type: string
+        nameEn:
+          type: string
+        imageDarkTheme:
+          type: string
+        imageLightTheme:
+          type: string
+        slug:
+          type: string
+        ordered:
+          type: number
+        display:
+          type: boolean
   securitySchemes:
     Authorization:
       type: oauth2
@@ -1357,6 +1522,89 @@ components:
                       assignee: Primo_Admin
                       createdBy: Primo_Admin
                       createdAt: '2019-08-24T14:15:22Z'
+    Article-ListArticles:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  belongTo: true
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                required:
+                  - currentPage
+                  - totalPage
+                  - total
+                  - articles
+                properties:
+                  currentPage:
+                    type: integer
+                  totalPage:
+                    type: integer
+                  total:
+                    type: integer
+                  articles:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Article'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  currentPage: 1
+                  totalPage: 1
+                  total: 1
+                  articles:
+                    - id: 1
+                      titleTh: string
+                      titleEn: string
+                      publishDate: '2019-08-24T14:15:22Z'
+                      status: string
+                      categories:
+                        - id: 1
+                          nameTh: ดูดวง
+                          nameEn: Horoscope
+                          imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+                          imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+                          slug: horoscope
+                          ordered: 2
+                          display: true
+                      publisher:
+                        id: 1
+                        nameTh: สยามเซ็นเตอร์
+                        nameEn: Siam Center
+                        logo: 'https://www.example.co.th/publisher/images/siam001_1629289490736_Logo'
+                      topics:
+                        - id: 1
+                          name: Street Food
+                      template: string
+                      expireDate: '2019-08-24T14:15:22Z'
+                      deepLinkUri: string
+                      deepLinkUrl: string
   requestBodies:
     Authentication-Token:
       content:
@@ -1705,6 +1953,31 @@ components:
         type: integer
     Branch-Id:
       name: branchId
+      in: query
+      required: false
+      schema:
+        type: integer
+    Pagination-Limit-20:
+      name: limit
+      in: query
+      schema:
+        type: string
+        default: '20'
+      description: The number of items to return
+    Article-Title:
+      name: title
+      in: query
+      required: false
+      schema:
+        type: string
+    Article-Author:
+      name: author
+      in: query
+      required: false
+      schema:
+        type: string
+    Article-StatusId:
+      name: statusId
       in: query
       required: false
       schema:
