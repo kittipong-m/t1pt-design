@@ -287,6 +287,17 @@ paths:
         $ref: '#/components/requestBodies/Article-Create'
       tags:
         - Article
+  /list_topics:
+    get:
+      summary: Get Topics
+      tags:
+        - Article
+      responses:
+        '200':
+          $ref: '#/components/responses/Article-ListTopic'
+      operationId: get-list_topics
+      parameters:
+        - $ref: '#/components/parameters/Article-TopicName'
 components:
   schemas:
     Pagination:
@@ -1723,6 +1734,48 @@ components:
                   expireDate: '2019-08-24T14:15:22Z'
                   deepLinkUri: string
                   deepLinkUrl: string
+    Article-ListTopic:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  currentStep: 0
+                  nextStep: 1
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArticleTopic'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  - id: 1
+                    name: Street Food
   requestBodies:
     Authentication-Token:
       content:
@@ -2214,6 +2267,12 @@ components:
       schema:
         type: integer
         minimum: 1
+    Article-TopicName:
+      name: topicName
+      in: query
+      required: false
+      schema:
+        type: string
 tags:
   - name: Article
   - name: Authentication
