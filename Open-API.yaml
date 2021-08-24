@@ -231,6 +231,17 @@ paths:
         - Company
       requestBody:
         $ref: '#/components/requestBodies/Company-SetOnboardStep'
+  /update_company_status:
+    post:
+      summary: Update Company Status
+      operationId: post-update_company_status
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-UpdateStatus'
+      tags:
+        - Company
+      requestBody:
+        $ref: '#/components/requestBodies/Company-UpdateStatus'
 components:
   schemas:
     Pagination:
@@ -1284,6 +1295,68 @@ components:
                 data:
                   currentStep: 0
                   nextStep: 1
+    Company-UpdateStatus:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
+                code: string
+                message: string
+                data:
+                  total: 1
+                  company:
+                    - {}
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                required:
+                  - total
+                properties:
+                  total:
+                    type: integer
+                  company:
+                    type: array
+                    uniqueItems: false
+                    items:
+                      $ref: '#/components/schemas/Company'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: string
+                message: string
+                data:
+                  total: 1
+                  company:
+                    - companyId: 1
+                      companyNameEn: 'Primo World CO.,LTD'
+                      companyNameTh: บริษัท พรีโม่ จำกัด
+                      companyTypeId: 1
+                      companyCategoryId: 1
+                      companySizeId: 1
+                      status: 1
+                      statusDesc: Draft
+                      assignee: Primo_Admin
+                      createdBy: Primo_Admin
+                      createdAt: '2019-08-24T14:15:22Z'
   requestBodies:
     Authentication-Token:
       content:
@@ -1493,6 +1566,29 @@ components:
               value:
                 companyId: 1
                 currentStep: 1
+    Company-UpdateStatus:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyIds:
+                type: array
+                minItems: 1
+                items:
+                  type: integer
+              statusId:
+                type: integer
+                minimum: 1
+            required:
+              - companyIds
+              - statusId
+          examples:
+            example-1:
+              value:
+                companyIds:
+                  - 1
+                statusId: 1
   parameters:
     EditorsPick-Sort:
       name: sort
