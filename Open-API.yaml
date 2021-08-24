@@ -298,6 +298,17 @@ paths:
       operationId: get-list_topics
       parameters:
         - $ref: '#/components/parameters/Article-TopicName'
+  /delete_articles:
+    delete:
+      summary: Delete Articles
+      operationId: delete-delete_articles
+      responses:
+        '204':
+          description: No Content
+      requestBody:
+        $ref: '#/components/requestBodies/Article-Delete'
+      tags:
+        - Article
 components:
   schemas:
     Pagination:
@@ -2115,6 +2126,16 @@ components:
               - publishDate
               - statusId
               - template
+    Article-Delete:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              articleIds:
+                type: array
+                items:
+                  type: integer
   parameters:
     EditorsPick-Sort:
       name: sort
