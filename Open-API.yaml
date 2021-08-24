@@ -115,20 +115,33 @@ paths:
       operationId: get-list_company_type
   /list_company_size:
     get:
-      summary: Your GET endpoint
-      tags: []
+      summary: List Company Size
+      tags:
+        - Company
       responses:
         '200':
           $ref: '#/components/responses/Company-ListCompanySize'
       operationId: get-list_company_size
   /list_company_category:
     get:
-      summary: Your GET endpoint
-      tags: []
+      summary: List Company Category
+      tags:
+        - Company
       responses:
         '200':
           $ref: '#/components/responses/Company-ListCompanyCategory'
       operationId: get-list_company_category
+  /submit_company:
+    post:
+      summary: Submit Company
+      operationId: post-submit_company
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-Create'
+      tags:
+        - Company
+      requestBody:
+        $ref: '#/components/requestBodies/Company-Submit'
 components:
   schemas:
     Pagination:
@@ -1069,6 +1082,21 @@ components:
                 companyCategoryId: 1
                 companySizeId: 1
                 assignee: admin
+    Company-Submit:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyId:
+                type: integer
+                minimum: 1
+            required:
+              - companyId
+          examples:
+            example-1:
+              value:
+                companyId: 1
   parameters:
     EditorsPick-Sort:
       name: sort
