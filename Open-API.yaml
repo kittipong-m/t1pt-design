@@ -184,6 +184,17 @@ paths:
         - Company
       requestBody:
         $ref: '#/components/requestBodies/Company-Update'
+  /delete_company:
+    delete:
+      summary: Delete Company
+      operationId: delete-delete_company
+      responses:
+        '204':
+          description: No Content
+      tags:
+        - Company
+      requestBody:
+        $ref: '#/components/requestBodies/Company-Delete'
 components:
   schemas:
     Pagination:
@@ -1260,12 +1271,24 @@ components:
           examples:
             example-1:
               value:
+                companyId: 1
                 companyNameEn: Example
                 companyNameTh: ตัวอย่าง
                 companyTypeId: 2
                 companyCategoryId: 1
                 companySizeId: 1
                 assignee: admin
+    Company-Delete:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyId:
+                type: integer
+                minimum: 1
+            required:
+              - companyId
   parameters:
     EditorsPick-Sort:
       name: sort
