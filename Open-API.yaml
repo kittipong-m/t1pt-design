@@ -121,6 +121,14 @@ paths:
         '200':
           $ref: '#/components/responses/Company-ListCompanySize'
       operationId: get-list_company_size
+  /list_company_category:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-ListCompanyCategory'
+      operationId: get-list_company_category
 components:
   schemas:
     Pagination:
@@ -301,6 +309,20 @@ components:
         - companySizeId: 1
           companySizeEn: string
           companySizeTh: string
+    CompanyCategory:
+      title: CompanyCategory
+      type: object
+      properties:
+        companyCategoryId:
+          type: integer
+        companyCategoryEn:
+          type: string
+        companyCategoryTh:
+          type: string
+      examples:
+        - companyCategoryId: 1
+          companyCategoryEn: string
+          companyCategoryTh: string
   securitySchemes:
     Authorization:
       type: oauth2
@@ -826,8 +848,8 @@ components:
             example-1:
               value:
                 successful: true
-                code: string
-                message: string
+                code: '00'
+                message: Successful
                 data:
                   companyType:
                     - companyTypeId: 1
@@ -879,6 +901,23 @@ components:
             example-1:
               value:
                 successful: true
+                code: '00'
+                message: Successful
+                data:
+                  companyType:
+                    - companySizeId: 1
+                      companySizeEn: string
+                      companySizeTh: string
+    Company-ListCompanyCategory:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                successful: true
                 code: string
                 message: string
                 data:
@@ -886,6 +925,42 @@ components:
                     - companySizeId: 1
                       companySizeEn: string
                       companySizeTh: string
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                required:
+                  - companyType
+                properties:
+                  companyType:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      $ref: '#/components/schemas/CompanyCategory'
+            required:
+              - successful
+              - code
+              - message
+              - data
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  companyType:
+                    - companyCategoryId: 1
+                      companyCategoryEn: string
+                      companyCategoryTh: string
   requestBodies:
     Authentication-Token:
       content:
