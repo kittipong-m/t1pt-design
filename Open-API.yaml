@@ -320,7 +320,7 @@ paths:
       operationId: get-list_categories
   /get_category:
     get:
-      summary: Your GET endpoint
+      summary: Get Category by ID
       tags:
         - Article
       responses:
@@ -329,6 +329,17 @@ paths:
       operationId: get-get_category
       parameters:
         - $ref: '#/components/parameters/Article-CategoryId'
+  /update_article:
+    put:
+      summary: Update Article
+      operationId: put-update_article
+      responses:
+        '200':
+          $ref: '#/components/responses/Article-Create'
+      tags:
+        - Article
+      requestBody:
+        $ref: '#/components/requestBodies/Article-Update'
 components:
   schemas:
     Pagination:
@@ -2255,6 +2266,159 @@ components:
               - publishDate
               - statusId
               - template
+          examples: {}
+    Article-Update:
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                titleTh: Test Title 20
+                titleEn: Test Title 20
+                subtitleTh: ทดสอบ ชื่อ ภาษาไทย 20
+                subtitleEn: Test Title EN 20
+                thumbnailTh: 'https://uatlibrary.the1.co.th/content/dam/articles/the-1-today/20.jpg'
+                thumbnailEn: 'https://uatlibrary.the1.co.th/content/dam/articles/the-1-today/20.jpg'
+                bodyTh: '<p>qqqqq</p><figure><img src=''https://sit-portal.the1.co.th/images/article/8535ea15-442e-4cc4-b7be-25b7b409bf44_1628667353893'' alt='''' title=''''><figcaption></figcaption></figure><p>qqqq</p>'
+                bodyEn: '<p>qqqqq</p><figure><img src=''https://sit-portal.the1.co.th/images/article/8535ea15-442e-4cc4-b7be-25b7b409bf44_1628667353893'' alt='''' title=''''><figcaption></figcaption></figure><p>qqqq</p>'
+                publishDate: '2021-07-12T00:00:00Z'
+                status: published
+                publisher:
+                  id: 4
+                  nameTh: The 1 Tester
+                  nameEn: The 1 Tester
+                  logo: tester1.png
+                categories:
+                  - id: 1
+                  - id: 2
+                topics:
+                  - id: 6
+                    name: streetfood
+                template: normal
+                expireDate: '2021-07-12T00:00:00Z'
+            properties:
+              articleId:
+                type: integer
+                minimum: 1
+              titleTh:
+                type: string
+                description: '`required if status id != 1 (not draft)`'
+              titleEn:
+                type: string
+                description: '`required if status id != 1 (not draft)`'
+              subtitleTh:
+                type: string
+                description: '`required if status id != 1 (not draft)`'
+              subtitleEn:
+                type: string
+                description: '`required if status id != 1 (not draft)`'
+              thumbnailTh:
+                type: string
+                description: '`required if status id != 1 (not draft)`'
+              thumbnailEn:
+                type: string
+                description: '`required if status id != 1 (not draft)`'
+              bodyTh:
+                type: string
+                description: '`required if status id != 1 (not draft)`'
+              bodyEn:
+                type: string
+                description: '`required if status id != 1 (not draft)`'
+              publishDate:
+                type: string
+                minLength: 0
+                format: date-time
+                maxLength: 255
+              expireDate:
+                type: string
+                format: date-time
+                minLength: 0
+                maxLength: 255
+              statusId:
+                type: integer
+                minimum: 1
+                maximum: 6
+              publisher:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    minimum: 1
+                  nameTh:
+                    type: string
+                  nameEn:
+                    type: string
+                  logo:
+                    type: string
+              categories:
+                type: array
+                uniqueItems: false
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      minimum: 1
+              topics:
+                type: array
+                uniqueItems: false
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      minimum: 1
+                    name:
+                      type: string
+              template:
+                type: string
+                enum:
+                  - video
+                minLength: 0
+                maxLength: 255
+              videoEn:
+                type: string
+                minLength: 1
+                description: '`required if template == ''video''`'
+              videoTh:
+                type: string
+                minLength: 1
+                description: '`required if template == ''video''`'
+            required:
+              - articleId
+              - publishDate
+              - statusId
+              - template
+          examples:
+            example-1:
+              value:
+                articleId: 1
+                titleTh: string
+                titleEn: string
+                subtitleTh: string
+                subtitleEn: string
+                thumbnailTh: string
+                thumbnailEn: string
+                bodyTh: string
+                bodyEn: string
+                publishDate: '2019-08-24T14:15:22Z'
+                expireDate: '2019-08-24T14:15:22Z'
+                statusId: 1
+                publisher:
+                  id: 1
+                  nameTh: string
+                  nameEn: string
+                  logo: string
+                categories:
+                  - id: 1
+                topics:
+                  - id: 1
+                    name: string
+                template: video
+                videoEn: string
+                videoTh: string
     Article-Delete:
       content:
         application/json:
