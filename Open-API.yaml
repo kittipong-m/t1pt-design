@@ -195,6 +195,20 @@ paths:
         - Company
       requestBody:
         $ref: '#/components/requestBodies/Company-Delete'
+  /check_belong_to:
+    get:
+      summary: Check Belong To
+      tags:
+        - Company
+      operationId: get-check_belong_to
+      parameters:
+        - $ref: '#/components/parameters/Company-Id'
+        - $ref: '#/components/parameters/Partner-Id'
+        - $ref: '#/components/parameters/Brand-Id'
+        - $ref: '#/components/parameters/Branch-Id'
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-CheckBelongTo'
 components:
   schemas:
     Pagination:
@@ -1100,6 +1114,49 @@ components:
                   currentPage: 1
                   totalPage: 1
                   total: 1
+    Company-CheckBelongTo:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                properties:
+                  belongTo:
+                    type: boolean
+                required:
+                  - belongTo
+            required:
+              - successful
+              - code
+              - message
+              - data
+            x-examples:
+              example-1:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  belongTo: true
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  belongTo: true
   requestBodies:
     Authentication-Token:
       content:
@@ -1390,6 +1447,24 @@ components:
       required: false
       schema:
         type: string
+    Partner-Id:
+      name: partnerId
+      in: query
+      schema:
+        type: string
+        minLength: 1
+    Brand-Id:
+      name: brandId
+      in: query
+      required: false
+      schema:
+        type: integer
+    Branch-Id:
+      name: branchId
+      in: query
+      required: false
+      schema:
+        type: integer
 tags:
   - name: Article
   - name: Authentication
