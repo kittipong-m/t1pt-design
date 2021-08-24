@@ -142,6 +142,16 @@ paths:
         - Company
       requestBody:
         $ref: '#/components/requestBodies/Company-Submit'
+  /get_company:
+    get:
+      summary: Get Company
+      tags: []
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-Create'
+      operationId: get-get_company
+      parameters:
+        - $ref: '#/components/parameters/Company-Id'
 components:
   schemas:
     Pagination:
@@ -1140,6 +1150,13 @@ components:
         type: string
         format: date-time
         minLength: 1
+    Company-Id:
+      name: companyId
+      in: query
+      required: true
+      schema:
+        type: integer
+        minimum: 1
 tags:
   - name: Article
   - name: Authentication
