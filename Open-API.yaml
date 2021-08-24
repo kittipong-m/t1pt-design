@@ -274,6 +274,19 @@ paths:
       operationId: get-get_article
       parameters:
         - $ref: '#/components/parameters/Article-Id'
+  /create_article:
+    post:
+      summary: Create Article
+      operationId: post-create_article
+      responses:
+        '200':
+          $ref: '#/components/responses/Company-Create'
+        '502':
+          $ref: '#/components/responses/502-BadGateway'
+      requestBody:
+        $ref: '#/components/requestBodies/Article-Create'
+      tags:
+        - Article
 components:
   schemas:
     Pagination:
@@ -1942,6 +1955,113 @@ components:
                 companyIds:
                   - 1
                 statusId: 1
+    Article-Create:
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                titleTh: Test Title 20
+                titleEn: Test Title 20
+                subtitleTh: ทดสอบ ชื่อ ภาษาไทย 20
+                subtitleEn: Test Title EN 20
+                thumbnailTh: 'https://uatlibrary.the1.co.th/content/dam/articles/the-1-today/20.jpg'
+                thumbnailEn: 'https://uatlibrary.the1.co.th/content/dam/articles/the-1-today/20.jpg'
+                bodyTh: '<p>qqqqq</p><figure><img src=''https://sit-portal.the1.co.th/images/article/8535ea15-442e-4cc4-b7be-25b7b409bf44_1628667353893'' alt='''' title=''''><figcaption></figcaption></figure><p>qqqq</p>'
+                bodyEn: '<p>qqqqq</p><figure><img src=''https://sit-portal.the1.co.th/images/article/8535ea15-442e-4cc4-b7be-25b7b409bf44_1628667353893'' alt='''' title=''''><figcaption></figcaption></figure><p>qqqq</p>'
+                publishDate: '2021-07-12T00:00:00Z'
+                status: published
+                publisher:
+                  id: 4
+                  nameTh: The 1 Tester
+                  nameEn: The 1 Tester
+                  logo: tester1.png
+                categories:
+                  - id: 1
+                  - id: 2
+                topics:
+                  - id: 6
+                    name: streetfood
+                template: normal
+                expireDate: '2021-07-12T00:00:00Z'
+            properties:
+              titleTh:
+                type: string
+                minLength: 0
+                maxLength: 255
+              titleEn:
+                type: string
+                minLength: 0
+                maxLength: 255
+              subtitleTh:
+                type: string
+                minLength: 0
+                maxLength: 255
+              subtitleEn:
+                type: string
+                minLength: 0
+                maxLength: 255
+              thumbnailTh:
+                type: string
+              thumbnailEn:
+                type: string
+              bodyTh:
+                type: string
+              bodyEn:
+                type: string
+              publishDate:
+                type: string
+                minLength: 0
+                format: date-time
+                maxLength: 255
+              expireDate:
+                type: string
+                format: date-time
+              statusId:
+                type: integer
+                minimum: 1
+                maximum: 6
+              template:
+                type: string
+                minLength: 0
+                maxLength: 255
+              publisher:
+                type: object
+                required:
+                  - id
+                properties:
+                  id:
+                    type: integer
+                  nameTh:
+                    type: string
+                  nameEn:
+                    type: string
+                  logo:
+                    type: string
+              categories:
+                type: array
+                uniqueItems: false
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+              topics:
+                type: array
+                uniqueItems: false
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                  required:
+                    - name
+            required:
+              - publishDate
+              - statusId
+              - template
   parameters:
     EditorsPick-Sort:
       name: sort
