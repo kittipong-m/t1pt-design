@@ -61,32 +61,6 @@ paths:
         $ref: '#/components/requestBodies/Authentication-Logout'
       tags:
         - Authentication
-  /editors_pick_list:
-    get:
-      summary: Get Schedules
-      responses:
-        '200':
-          $ref: '#/components/responses/EditorsPick-List'
-        '400':
-          $ref: '#/components/responses/400-BadRequest'
-        '401':
-          $ref: '#/components/responses/401-Unauthorized'
-        '403':
-          $ref: '#/components/responses/403-Forbidden'
-        '500':
-          $ref: '#/components/responses/500-InternalServerError'
-        '502':
-          $ref: '#/components/responses/502-BadGateway'
-      operationId: get-editors_picks
-      parameters:
-        - $ref: '#/components/parameters/Pagination-Page'
-        - $ref: '#/components/parameters/Pagination-Limit'
-        - $ref: '#/components/parameters/EditorsPick-Sort'
-        - $ref: '#/components/parameters/EditorsPick-StartDateTime'
-        - $ref: '#/components/parameters/EditorsPick-EndDateTime'
-      tags:
-        - Editor's Pick
-    parameters: []
   /create_company:
     post:
       summary: Create Company
@@ -340,6 +314,50 @@ paths:
         - Article
       requestBody:
         $ref: '#/components/requestBodies/Article-Update'
+  /editors_pick_list:
+    get:
+      summary: Get Schedules
+      responses:
+        '200':
+          $ref: '#/components/responses/EditorsPick-List'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '500':
+          $ref: '#/components/responses/500-InternalServerError'
+        '502':
+          $ref: '#/components/responses/502-BadGateway'
+      operationId: get-editors_picks
+      parameters:
+        - $ref: '#/components/parameters/Pagination-Page'
+        - $ref: '#/components/parameters/Pagination-Limit-20'
+        - $ref: '#/components/parameters/EditorsPick-StartDateTime'
+        - $ref: '#/components/parameters/EditorsPick-EndDateTime'
+        - schema:
+            type: string
+            enum:
+              - startDateTime
+              - endDateTime
+            default: startDateTime
+          in: query
+          name: sortBy
+          description: field to sort items
+        - schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+          in: query
+          description: direction to sort items
+          name: sortDirection
+      tags:
+        - Editor's Pick
+      description: ''
+    parameters: []
 components:
   schemas:
     Pagination:
@@ -368,7 +386,7 @@ components:
           pageSize: 0
           totalElements: 0
           totalPages: 0
-    EditorsPick-Schedule:
+    Schedule:
       description: ''
       type: object
       x-examples:
@@ -421,6 +439,7 @@ components:
         - startDateTime
         - createdDate
         - updatedDate
+      title: ''
     Company:
       description: ''
       type: object
@@ -680,6 +699,7 @@ components:
           type: number
         display:
           type: boolean
+      title: ''
   securitySchemes:
     Authorization:
       type: oauth2
@@ -988,12 +1008,11 @@ components:
                     $ref: '#/components/schemas/Pagination'
                   schedules:
                     type: array
-                    uniqueItems: true
-                    minItems: 0
+                    uniqueItems: false
                     items:
-                      $ref: '#/components/schemas/EditorsPick-Schedule'
+                      $ref: '#/components/schemas/Schedule'
                   currentSchedule:
-                    $ref: '#/components/schemas/EditorsPick-Schedule'
+                    $ref: '#/components/schemas/Schedule'
             required:
               - successful
               - code
@@ -1037,7 +1056,6 @@ components:
                     totalElements: 0
                     totalPages: 0
                   schedules: []
-                  currentSchedule: null
     502-BadGateway:
       description: Bad Gateway (received an invalid response from another server)
       content:
@@ -2430,15 +2448,6 @@ components:
                 items:
                   type: integer
   parameters:
-    EditorsPick-Sort:
-      name: sort
-      in: query
-      schema:
-        type: string
-        minimum: 1
-        minLength: 1
-        example: 'startDateTime,asc'
-      description: field and direction to sort items
     Pagination-Page:
       name: page
       in: query
@@ -2454,8 +2463,8 @@ components:
       required: false
       schema:
         type: integer
-        minimum: 0
         default: 10
+        minimum: 1
       description: The number of items to return
     EditorsPick-StartDateTime:
       name: startDateTime
@@ -2525,12 +2534,16 @@ components:
       required: false
       schema:
         type: string
+      description: field to sort items
     Pagination-SortDirection:
       name: sortDirection
       in: query
-      required: false
       schema:
         type: string
+        enum:
+          - asc
+          - desc
+      description: direction to sort items
     Partner-Id:
       name: partnerId
       in: query
@@ -2553,8 +2566,9 @@ components:
       name: limit
       in: query
       schema:
-        type: string
+        type: integer
         default: '20'
+        minimum: 1
       description: The number of items to return
     Article-Title:
       name: title
