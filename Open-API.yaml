@@ -2464,7 +2464,7 @@ components:
       schema:
         type: integer
         default: 10
-        minimum: 1
+        minimum: 0
       description: The number of items to return
     EditorsPick-StartDateTime:
       name: startDateTime
@@ -2568,7 +2568,7 @@ components:
       schema:
         type: integer
         default: '20'
-        minimum: 1
+        minimum: 0
       description: The number of items to return
     Article-Title:
       name: title
