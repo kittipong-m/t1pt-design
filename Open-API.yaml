@@ -1104,10 +1104,10 @@ components:
                     minimum: 0
                   currentPage:
                     type: integer
-                    minimum: 0
+                    minimum: 1
                   totalPage:
                     type: integer
-                    minimum: 0
+                    minimum: 1
                   schedules:
                     type: array
                     uniqueItems: false
