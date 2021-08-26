@@ -383,6 +383,24 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/EditorsPick-Create'
       description: 'Create editor''s pick schedule with flag `forceUpdate: true`.'
+  /check_editors_pick:
+    get:
+      summary: Check Duplicate Schedule
+      tags:
+        - Editor's Pick
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/404-DataNotFound'
+        '500':
+          $ref: '#/components/responses/500-InternalServerError'
+        '502':
+          $ref: '#/components/responses/502-BadGateway'
+      operationId: get-check_editors_pick
+      parameters:
+        - $ref: '#/components/parameters/Schedule-StartDateTime'
+      description: ''
 components:
   schemas:
     Pagination:
@@ -2830,6 +2848,21 @@ components:
       required: true
       schema:
         type: integer
+    Schedule-Id:
+      name: scheduleId
+      in: query
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+    Schedule-StartDateTime:
+      name: startDateTime
+      in: query
+      schema:
+        type: string
+        format: date-time
+        minLength: 1
+      required: true
 tags:
   - name: Article
   - name: Authentication
