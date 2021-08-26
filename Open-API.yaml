@@ -358,6 +358,24 @@ paths:
         - Editor's Pick
       description: ''
     parameters: []
+  /check_editors_pick:
+    get:
+      summary: Check Duplicate Schedule
+      tags:
+        - Editor's Pick
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/404-DataNotFound'
+        '500':
+          $ref: '#/components/responses/500-InternalServerError'
+        '502':
+          $ref: '#/components/responses/502-BadGateway'
+      operationId: get-check_editors_pick
+      parameters:
+        - $ref: '#/components/parameters/Schedule-StartDateTime'
+      description: ''
   /create_editors_pick:
     parameters: []
     post:
@@ -383,24 +401,27 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/EditorsPick-Create'
       description: 'Create editor''s pick schedule with flag `forceUpdate: true`.'
-  /check_editors_pick:
-    get:
-      summary: Check Duplicate Schedule
-      tags:
-        - Editor's Pick
+  /update_editors_pick:
+    put:
+      summary: Update Schedule
+      operationId: put-update_editors_pick
       responses:
-        '204':
-          description: No Content
-        '404':
-          $ref: '#/components/responses/404-DataNotFound'
+        '200':
+          $ref: '#/components/responses/EditorsPick-Create'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
         '500':
           $ref: '#/components/responses/500-InternalServerError'
         '502':
           $ref: '#/components/responses/502-BadGateway'
-      operationId: get-check_editors_pick
-      parameters:
-        - $ref: '#/components/parameters/Schedule-StartDateTime'
-      description: ''
+      tags:
+        - Editor's Pick
+      requestBody:
+        $ref: '#/components/requestBodies/EditorsPick-Update'
 components:
   schemas:
     Pagination:
@@ -2677,6 +2698,46 @@ components:
                 format: date-time
                 minLength: 1
             required:
+              - editorsPickBanners
+              - editorsPickLists
+              - startDateTime
+          examples:
+            example-1:
+              value:
+                editorsPickBanners:
+                  - 1
+                editorsPickLists:
+                  - 1
+                startDateTime: '2019-08-24T14:15:22Z'
+    EditorsPick-Update:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                minimum: 1
+              editorsPickBanners:
+                type: array
+                minItems: 1
+                uniqueItems: true
+                items:
+                  type: integer
+                  minimum: 1
+              editorsPickLists:
+                type: array
+                minItems: 1
+                uniqueItems: true
+                items:
+                  type: integer
+                  minimum: 1
+              startDateTime:
+                type: string
+                format: date-time
+                minLength: 1
+            required:
+              - id
               - editorsPickBanners
               - editorsPickLists
               - startDateTime
