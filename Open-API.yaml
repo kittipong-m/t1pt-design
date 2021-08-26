@@ -1094,11 +1094,20 @@ components:
               data:
                 type: object
                 required:
-                  - pagination
+                  - total
+                  - currentPage
+                  - totalPage
                   - schedules
                 properties:
-                  pagination:
-                    $ref: '#/components/schemas/Pagination'
+                  total:
+                    type: integer
+                    minimum: 0
+                  currentPage:
+                    type: integer
+                    minimum: 0
+                  totalPage:
+                    type: integer
+                    minimum: 0
                   schedules:
                     type: array
                     uniqueItems: false
@@ -1118,11 +1127,9 @@ components:
                 code: '00'
                 message: Successful
                 data:
-                  pagination:
-                    pageNumber: 1
-                    pageSize: 20
-                    totalElements: 1
-                    totalPages: 1
+                  total: 1
+                  currentPage: 1
+                  totalPage: 1
                   schedules:
                     - id: 1
                       editorPickBannerCount: 1
@@ -1143,11 +1150,9 @@ components:
                 code: '00'
                 message: Successful
                 data:
-                  pagination:
-                    pageNumber: 0
-                    pageSize: 0
-                    totalElements: 0
-                    totalPages: 0
+                  total: 0
+                  currentPage: 1
+                  totalPage: 1
                   schedules: []
     502-BadGateway:
       description: Bad Gateway (received an invalid response from another server)
