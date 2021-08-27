@@ -422,6 +422,110 @@ paths:
         - Editor's Pick
       requestBody:
         $ref: '#/components/requestBodies/EditorsPick-Update'
+  /get_editor_pick_detail:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scheduleId:
+                    type: integer
+                  banners:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Article'
+                  isEditorPickBannerChanged:
+                    type: boolean
+                  lists:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Article'
+                  isEditorPickListChanged:
+                    type: boolean
+              examples:
+                example-1:
+                  value:
+                    scheduleId: 0
+                    banners:
+                      - id: 1
+                        titleTh: string
+                        titleEn: string
+                        publishDate: '2019-08-24T14:15:22Z'
+                        status: string
+                        categories:
+                          - id: 1
+                            nameTh: ดูดวง
+                            nameEn: Horoscope
+                            imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+                            imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+                            slug: horoscope
+                            ordered: 2
+                            display: true
+                        publisher:
+                          id: 1
+                          nameTh: สยามเซ็นเตอร์
+                          nameEn: Siam Center
+                          logo: 'https://www.example.co.th/publisher/images/siam001_1629289490736_Logo'
+                        topics:
+                          - id: 1
+                            name: Street Food
+                        template: string
+                        expireDate: '2019-08-24T14:15:22Z'
+                        deepLinkUri: string
+                        deepLinkUrl: string
+                    isEditorPickBannerChanged: true
+                    lists:
+                      - id: 1
+                        titleTh: string
+                        titleEn: string
+                        publishDate: '2019-08-24T14:15:22Z'
+                        status: string
+                        categories:
+                          - id: 1
+                            nameTh: ดูดวง
+                            nameEn: Horoscope
+                            imageDarkTheme: 'https://www.example.co.th/category/article/dark/horoscope.png'
+                            imageLightTheme: 'https://www.example.co.th/media/category/article/light/horoscope.png'
+                            slug: horoscope
+                            ordered: 2
+                            display: true
+                        publisher:
+                          id: 1
+                          nameTh: สยามเซ็นเตอร์
+                          nameEn: Siam Center
+                          logo: 'https://www.example.co.th/publisher/images/siam001_1629289490736_Logo'
+                        topics:
+                          - id: 1
+                            name: Street Food
+                        template: string
+                        expireDate: '2019-08-24T14:15:22Z'
+                        deepLinkUri: string
+                        deepLinkUrl: string
+                    isEditorPickListChanged: true
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '500':
+          $ref: '#/components/responses/500-InternalServerError'
+        '502':
+          $ref: '#/components/responses/502-BadGateway'
+      operationId: get-get_editor_pick_detail
+      description: Get editor pick detail by send schedule Id to microservice to get banner and list
+      parameters:
+        - schema:
+            type: integer
+          in: query
+          name: editorPickId
+          description: ID of editor pick
   /delete_editors_pick:
     parameters: []
     delete:
