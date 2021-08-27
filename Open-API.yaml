@@ -3,6 +3,8 @@ info:
   title: The1 Portal API
   version: '1.0'
   description: The1 Portal API Specification
+  contact:
+    name: '-'
 servers:
   - url: 'http://localhost:3000/v1'
     description: Local
@@ -1126,7 +1128,7 @@ components:
                 sessionState: 40e36893-e12a-456e-8a0d-62e8f669da3a
                 scope: profile
     EditorsPick-List:
-      description: Example response
+      description: OK
       content:
         application/json:
           schema:
@@ -1178,7 +1180,7 @@ components:
                   - total
                   - currentPage
                   - totalPage
-                  - schedules
+                  - editorsPicks
                 properties:
                   total:
                     type: integer
@@ -1189,12 +1191,12 @@ components:
                   totalPage:
                     type: integer
                     minimum: 1
-                  schedules:
+                  editorsPicks:
                     type: array
                     uniqueItems: false
                     items:
                       $ref: '#/components/schemas/Schedule'
-                  currentSchedule:
+                  currentEditorsPick:
                     $ref: '#/components/schemas/Schedule'
             required:
               - successful
@@ -1211,14 +1213,14 @@ components:
                   total: 1
                   currentPage: 1
                   totalPage: 1
-                  schedules:
+                  editorsPicks:
                     - id: 1
                       editorPickBannerCount: 1
                       editorPickListCount: 1
                       startDateTime: '2019-08-24T14:15:22Z'
                       createdDate: '2019-08-24T14:15:22Z'
                       updatedDate: '2019-08-24T14:15:22Z'
-                  currentSchedule:
+                  currentEditorsPick:
                     id: 1
                     editorPickBannerCount: 1
                     editorPickListCount: 1
@@ -1234,7 +1236,7 @@ components:
                   total: 0
                   currentPage: 1
                   totalPage: 1
-                  schedules: []
+                  editorsPicks: []
     502-BadGateway:
       description: Bad Gateway (received an invalid response from another server)
       content:
@@ -2902,8 +2904,12 @@ components:
           examples:
             example-1:
               value:
+                id: 1
                 editorsPickBannerIds:
                   - 1
+                  - 2
+                  - 3
+                  - 4
                 editorsPickListIds:
                   - 1
                 startDateTime: '2019-08-24T14:15:22Z'
