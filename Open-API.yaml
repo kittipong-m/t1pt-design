@@ -358,7 +358,7 @@ paths:
           name: sortDirection
       tags:
         - Editor's Pick
-      description: 'Get list of editor''s picks and current editor's pick'
+      description: Get list of editor's picks and current editor's pick
     parameters: []
   /check_editors_pick:
     get:
@@ -402,7 +402,7 @@ paths:
         - Editor's Pick
       requestBody:
         $ref: '#/components/requestBodies/EditorsPick-Create'
-      description: 'Create editor''s pick'
+      description: Create editor's pick
   /update_editors_pick:
     put:
       summary: Update Editor's Pick
@@ -445,7 +445,7 @@ paths:
         '502':
           $ref: '#/components/responses/502-BadGateway'
       operationId: get-get_editor_pick_detail
-      description: 'Get editor's pick detail by send editor's pick ID to microservice to get banner and list'
+      description: Get editor's pick detail by send editor's pick ID to microservice to get banner and list
       parameters:
         - schema:
             type: integer
@@ -787,32 +787,33 @@ components:
       x-examples:
         example-1:
           id: 2
-          editorPickBannerCount: 1
-          editorPickListCount: 1
+          editorsPickBannerCount: 1
+          editorsPickListCount: 1
           startDateTime: '2021-08-17T21:06:14Z'
           createdDate: '2021-08-17T21:06:14Z'
           updatedDate: '2021-08-17T21:06:14Z'
       examples:
         - id: 1
-          editorPickBannerCount: 1
-          editorPickListCount: 1
+          editorsPickBannerCount: 1
+          editorsPickListCount: 1
           startDateTime: '2019-08-24T14:15:22Z'
           createdDate: '2019-08-24T14:15:22Z'
           updatedDate: '2019-08-24T14:15:22Z'
         - id: 2
-          editorPickBannerCount: 3
-          editorPickListCount: 3
+          editorsPickBannerCount: 3
+          editorsPickListCount: 3
           startDateTime: '2020-08-24T14:15:22Z'
           createdDate: '2020-08-24T14:15:22Z'
           updatedDate: '2020-08-24T14:15:22Z'
+      title: ''
       properties:
         id:
           type: number
           minimum: 1
-        editorPickBannerCount:
+        editorsPickBannerCount:
           type: number
           minimum: 0
-        editorPickListCount:
+        editorsPickListCount:
           type: number
           minimum: 0
         startDateTime:
@@ -829,12 +830,11 @@ components:
           format: date-time
       required:
         - id
-        - editorPickBannerCount
-        - editorPickListCount
+        - editorsPickBannerCount
+        - editorsPickListCount
         - startDateTime
         - createdDate
         - updatedDate
-      title: ''
     EditorsPickError:
       description: ''
       type: object
@@ -1140,23 +1140,23 @@ components:
                 code: string
                 message: Internal Server Error
                 data:
-                  schedules:
+                  editorsPicks:
                     - id: 2
-                      editorPickBannerCount: 1
-                      editorPickListCount: 1
+                      editorsPickBannerCount: 1
+                      editorsPickListCount: 1
                       startDateTime: '2021-08-17T21:06:14Z'
                       createdDate: '2021-08-17T21:06:14Z'
                       updatedDate: '2021-08-17T21:06:14Z'
                     - id: 3
-                      editorPickBannerCount: 1
-                      editorPickListCount: 1
+                      editorsPickBannerCount: 1
+                      editorsPickListCount: 1
                       startDateTime: '2021-08-17T23:28:37Z'
                       createdDate: '2021-08-17T23:28:37Z'
                       updatedDate: '2021-08-17T23:28:37Z'
                   currentSchedules:
                     id: 4
-                    editorPickBannerCount: 1
-                    editorPickListCount: 1
+                    editorsPickBannerCount: 1
+                    editorsPickListCount: 1
                     startDateTime: '2021-08-18T03:32:55Z'
                     createdDate: '2021-08-18T03:32:55Z'
                     updatedDate: '2021-08-18T03:32:55Z'
@@ -1195,9 +1195,9 @@ components:
                     type: array
                     uniqueItems: false
                     items:
-                      $ref: '#/components/schemas/Schedule'
+                      $ref: '#/components/schemas/EditorsPick'
                   currentEditorsPick:
-                    $ref: '#/components/schemas/Schedule'
+                    $ref: '#/components/schemas/EditorsPick'
             required:
               - successful
               - code
@@ -1215,15 +1215,15 @@ components:
                   totalPage: 1
                   editorsPicks:
                     - id: 1
-                      editorPickBannerCount: 1
-                      editorPickListCount: 1
+                      editorsPickBannerCount: 1
+                      editorsPickListCount: 1
                       startDateTime: '2019-08-24T14:15:22Z'
                       createdDate: '2019-08-24T14:15:22Z'
                       updatedDate: '2019-08-24T14:15:22Z'
                   currentEditorsPick:
                     id: 1
-                    editorPickBannerCount: 1
-                    editorPickListCount: 1
+                    editorsPickBannerCount: 1
+                    editorsPickListCount: 1
                     startDateTime: '2019-08-24T14:15:22Z'
                     createdDate: '2019-08-24T14:15:22Z'
                     updatedDate: '2019-08-24T14:15:22Z'
@@ -2174,8 +2174,8 @@ components:
                 message: Successful
                 data:
                   id: 1
-                  editorPickBannerCount: 1
-                  editorPickListCount: 1
+                  editorsPickBannerCount: 1
+                  editorsPickListCount: 1
                   startDateTime: '2019-08-24T14:15:22Z'
                   createdDate: '2019-08-24T14:15:22Z'
                   updatedDate: '2019-08-24T14:15:22Z'
@@ -2192,14 +2192,14 @@ components:
                 code: E01
                 message: Some of editor's pick banners/lists have invalid status
                 data:
-                  editorPickBanners:
+                  editorsPickBanners:
                     - id: 1
                       status: published
                     - id: 2
                       status: unpublished
                     - id: 3
                       status: not found
-                  editorPickLists:
+                  editorsPickLists:
                     - id: 1
                       status: published
                     - id: 2
@@ -2218,16 +2218,16 @@ components:
               data:
                 type: object
                 required:
-                  - editorPickBanners
-                  - editorPickLists
+                  - editorsPickBanners
+                  - editorsPickLists
                 properties:
-                  editorPickBanners:
+                  editorsPickBanners:
                     type: array
                     uniqueItems: true
                     minItems: 1
                     items:
                       $ref: '#/components/schemas/EditorsPickError'
-                  editorPickLists:
+                  editorsPickLists:
                     type: array
                     uniqueItems: true
                     minItems: 1
@@ -2245,14 +2245,14 @@ components:
                 code: E01
                 message: Some of editor's pick banners/lists have invalid status
                 data:
-                  editorPickBanners:
+                  editorsPickBanners:
                     - id: 1
                       status: published
                     - id: 2
                       status: unpublished
                     - id: 3
                       status: not found
-                  editorPickLists:
+                  editorsPickLists:
                     - id: 1
                       status: published
                     - id: 2
@@ -2309,13 +2309,13 @@ components:
                     type: array
                     items:
                       $ref: '#/components/schemas/BannerList'
-                  isEditorPickBannerChanged:
+                  isEditorsPickBannerChanged:
                     type: boolean
                   lists:
                     type: array
                     items:
                       $ref: '#/components/schemas/BannerList'
-                  isEditorPickListChanged:
+                  isEditorsPickListChanged:
                     type: boolean
             required:
               - successful
