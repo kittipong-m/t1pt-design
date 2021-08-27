@@ -2751,17 +2751,19 @@ components:
               id:
                 type: integer
                 minimum: 1
-              editorsPickBanners:
+              editorsPickBannerIds:
                 type: array
                 minItems: 1
                 uniqueItems: true
+                maxItems: 20
                 items:
                   type: integer
                   minimum: 1
-              editorsPickLists:
+              editorsPickListIds:
                 type: array
                 minItems: 1
                 uniqueItems: true
+                maxItems: 3
                 items:
                   type: integer
                   minimum: 1
@@ -2769,17 +2771,20 @@ components:
                 type: string
                 format: date-time
                 minLength: 1
+              forceUpdate:
+                type: boolean
+                default: true
             required:
               - id
-              - editorsPickBanners
-              - editorsPickLists
+              - editorsPickBannerIds
+              - editorsPickListIds
               - startDateTime
           examples:
             example-1:
               value:
-                editorsPickBanners:
+                editorsPickBannerIds:
                   - 1
-                editorsPickLists:
+                editorsPickListIds:
                   - 1
                 startDateTime: '2019-08-24T14:15:22Z'
     EditorsPick-Delete:
