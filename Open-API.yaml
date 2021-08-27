@@ -783,7 +783,9 @@ components:
         - draft
     EditorsPick:
       description: ''
-      type: object
+      type:
+        - object
+        - 'null'
       x-examples:
         example-1:
           id: 2
@@ -799,12 +801,6 @@ components:
           startDateTime: '2019-08-24T14:15:22Z'
           createdDate: '2019-08-24T14:15:22Z'
           updatedDate: '2019-08-24T14:15:22Z'
-        - id: 2
-          editorsPickBannerCount: 3
-          editorsPickListCount: 3
-          startDateTime: '2020-08-24T14:15:22Z'
-          createdDate: '2020-08-24T14:15:22Z'
-          updatedDate: '2020-08-24T14:15:22Z'
       title: ''
       properties:
         id:
@@ -1181,6 +1177,7 @@ components:
                   - currentPage
                   - totalPage
                   - editorsPicks
+                  - currentEditorsPick
                 properties:
                   total:
                     type: integer
@@ -1237,6 +1234,7 @@ components:
                   currentPage: 1
                   totalPage: 1
                   editorsPicks: []
+                  currentEditorsPick: null
     502-BadGateway:
       description: Bad Gateway (received an invalid response from another server)
       content:
