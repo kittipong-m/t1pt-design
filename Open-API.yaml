@@ -422,9 +422,9 @@ paths:
         - Editor's Pick
       requestBody:
         $ref: '#/components/requestBodies/EditorsPick-Update'
-  /get_editor_pick_detail:
+  /get_editors_pick_detail:
     get:
-      summary: Your GET endpoint
+      summary: Get Editor's Pick Detail
       tags: []
       responses:
         '200':
@@ -508,32 +508,6 @@ paths:
                         deepLinkUri: string
                         deepLinkUrl: string
                     isEditorPickListChanged: true
-        '400':
-          $ref: '#/components/responses/400-BadRequest'
-        '401':
-          $ref: '#/components/responses/401-Unauthorized'
-        '403':
-          $ref: '#/components/responses/403-Forbidden'
-        '500':
-          $ref: '#/components/responses/500-InternalServerError'
-        '502':
-          $ref: '#/components/responses/502-BadGateway'
-      operationId: get-get_editor_pick_detail
-      description: Get editor pick detail by send schedule Id to microservice to get banner and list
-      parameters:
-        - schema:
-            type: integer
-          in: query
-          name: editorPickId
-          description: ID of editor pick
-  /get_editors_pick_detail:
-    get:
-      summary: Get Editor's Pick Detail
-      tags:
-        - Editor's Pick
-      responses:
-        '200':
-          $ref: '#/components/responses/EditorsPick-Detail'
         '400':
           $ref: '#/components/responses/400-BadRequest'
         '401':
