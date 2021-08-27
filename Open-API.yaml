@@ -2710,6 +2710,7 @@ components:
                 type: array
                 minItems: 1
                 uniqueItems: true
+                maxItems: 20
                 items:
                   type: integer
                   minimum: 1
@@ -2717,6 +2718,7 @@ components:
                 type: array
                 minItems: 1
                 uniqueItems: true
+                maxItems: 3
                 items:
                   type: integer
                   minimum: 1
@@ -2734,11 +2736,12 @@ components:
           examples:
             example-1:
               value:
-                editorsPickBanners:
+                editorsPickBannerIds:
                   - 1
-                editorsPickLists:
+                editorsPickListIds:
                   - 1
                 startDateTime: '2019-08-24T14:15:22Z'
+      description: ''
     EditorsPick-Update:
       content:
         application/json:
