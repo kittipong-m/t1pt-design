@@ -532,8 +532,8 @@ paths:
       summary: Delete Editor's Pick
       operationId: delete-delete_editors_pick
       responses:
-        '204':
-          description: No Content
+        '200':
+          $ref: '#/components/responses/200-SuccessWithoutData'
         '400':
           $ref: '#/components/responses/400-BadRequest'
         '401':
@@ -548,6 +548,9 @@ paths:
         $ref: '#/components/requestBodies/EditorsPick-Delete'
       tags:
         - Editor's Pick
+      description: |-
+        - Can't Delete current Editor's Pick (`editorsPickIds` not contain current Editor's Pick Id)
+        - If some of Banner/List are `not found` or `removed` it will still be `success`
 components:
   schemas:
     Pagination:
@@ -2302,6 +2305,34 @@ components:
                       status: unpublished
                     - id: 4
                       status: scheduled
+    200-SuccessWithoutData:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data: null
   requestBodies:
     Authentication-Token:
       content:
@@ -2901,9 +2932,12 @@ components:
                 type: array
                 minItems: 1
                 uniqueItems: true
+                description: not contain current Editor's Pick Id
                 items:
                   type: integer
                   minimum: 1
+            required:
+              - editorsPickIds
           examples:
             example-1:
               value:
