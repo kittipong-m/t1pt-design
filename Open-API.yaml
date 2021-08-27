@@ -318,7 +318,7 @@ paths:
         $ref: '#/components/requestBodies/Article-Update'
   /editors_pick_list:
     get:
-      summary: Get Editor's Pick
+      summary: Get Editor's Picks
       responses:
         '200':
           $ref: '#/components/responses/EditorsPick-List'
@@ -335,9 +335,9 @@ paths:
       operationId: get-editors_picks
       parameters:
         - $ref: '#/components/parameters/Pagination-Page'
-        - $ref: '#/components/parameters/Pagination-Limit-20'
-        - $ref: '#/components/parameters/EditorsPick-StartDateTime'
-        - $ref: '#/components/parameters/EditorsPick-EndDateTime'
+        - $ref: '#/components/parameters/Pagination-Limit'
+        - $ref: '#/components/parameters/EditorsPick-StartDateTimeFrom'
+        - $ref: '#/components/parameters/EditorsPick-StartDateTimeTo'
         - schema:
             type: string
             enum:
@@ -358,7 +358,7 @@ paths:
           name: sortDirection
       tags:
         - Editor's Pick
-      description: ''
+      description: 'Get list of editor''s picks and current editor's pick'
     parameters: []
   /check_editors_pick:
     get:
@@ -376,7 +376,7 @@ paths:
           $ref: '#/components/responses/502-BadGateway'
       operationId: get-check_editors_pick
       parameters:
-        - $ref: '#/components/parameters/Schedule-StartDateTime'
+        - $ref: '#/components/parameters/EditorsPick-StartDateTime'
       description: ''
   /create_editors_pick:
     parameters: []
@@ -402,7 +402,7 @@ paths:
         - Editor's Pick
       requestBody:
         $ref: '#/components/requestBodies/EditorsPick-Create'
-      description: 'Create editor''s pick schedule with flag `forceUpdate: true`.'
+      description: 'Create editor''s pick'
   /update_editors_pick:
     put:
       summary: Update Editor's Pick
@@ -426,7 +426,7 @@ paths:
         $ref: '#/components/requestBodies/EditorsPick-Update'
   /get_editors_pick_detail:
     get:
-      summary: Get Editor's Pick Detail
+      summary: Get Editor's Pick by ID
       tags:
         - Editor's Pick
       responses:
@@ -445,7 +445,7 @@ paths:
         '502':
           $ref: '#/components/responses/502-BadGateway'
       operationId: get-get_editor_pick_detail
-      description: Get editor pick detail by send schedule Id to microservice to get banner and list
+      description: 'Get editor's pick detail by send editor's pick ID to microservice to get banner and list'
       parameters:
         - schema:
             type: integer
@@ -508,60 +508,6 @@ components:
           pageSize: 0
           totalElements: 0
           totalPages: 0
-    Schedule:
-      description: ''
-      type: object
-      x-examples:
-        example-1:
-          id: 2
-          editorPickBannerCount: 1
-          editorPickListCount: 1
-          startDateTime: '2021-08-17T21:06:14Z'
-          createdDate: '2021-08-17T21:06:14Z'
-          updatedDate: '2021-08-17T21:06:14Z'
-      examples:
-        - id: 1
-          editorPickBannerCount: 1
-          editorPickListCount: 1
-          startDateTime: '2019-08-24T14:15:22Z'
-          createdDate: '2019-08-24T14:15:22Z'
-          updatedDate: '2019-08-24T14:15:22Z'
-        - id: 2
-          editorPickBannerCount: 3
-          editorPickListCount: 3
-          startDateTime: '2020-08-24T14:15:22Z'
-          createdDate: '2020-08-24T14:15:22Z'
-          updatedDate: '2020-08-24T14:15:22Z'
-      properties:
-        id:
-          type: number
-          minimum: 1
-        editorPickBannerCount:
-          type: number
-          minimum: 0
-        editorPickListCount:
-          type: number
-          minimum: 0
-        startDateTime:
-          type: string
-          minLength: 1
-          format: date-time
-        createdDate:
-          type: string
-          minLength: 1
-          format: date-time
-        updatedDate:
-          type: string
-          minLength: 1
-          format: date-time
-      required:
-        - id
-        - editorPickBannerCount
-        - editorPickListCount
-        - startDateTime
-        - createdDate
-        - updatedDate
-      title: Schedule
     Company:
       description: ''
       type: object
@@ -822,7 +768,74 @@ components:
         display:
           type: boolean
       title: ''
-    ScheduleError:
+    ArticleStatus:
+      type: string
+      title: ArticleStatus
+      enum:
+        - draft
+        - published
+        - unpublished
+        - scheduled
+        - waiting
+        - rejected
+        - not found
+      examples:
+        - draft
+    EditorsPick:
+      description: ''
+      type: object
+      x-examples:
+        example-1:
+          id: 2
+          editorPickBannerCount: 1
+          editorPickListCount: 1
+          startDateTime: '2021-08-17T21:06:14Z'
+          createdDate: '2021-08-17T21:06:14Z'
+          updatedDate: '2021-08-17T21:06:14Z'
+      examples:
+        - id: 1
+          editorPickBannerCount: 1
+          editorPickListCount: 1
+          startDateTime: '2019-08-24T14:15:22Z'
+          createdDate: '2019-08-24T14:15:22Z'
+          updatedDate: '2019-08-24T14:15:22Z'
+        - id: 2
+          editorPickBannerCount: 3
+          editorPickListCount: 3
+          startDateTime: '2020-08-24T14:15:22Z'
+          createdDate: '2020-08-24T14:15:22Z'
+          updatedDate: '2020-08-24T14:15:22Z'
+      properties:
+        id:
+          type: number
+          minimum: 1
+        editorPickBannerCount:
+          type: number
+          minimum: 0
+        editorPickListCount:
+          type: number
+          minimum: 0
+        startDateTime:
+          type: string
+          minLength: 1
+          format: date-time
+        createdDate:
+          type: string
+          minLength: 1
+          format: date-time
+        updatedDate:
+          type: string
+          minLength: 1
+          format: date-time
+      required:
+        - id
+        - editorPickBannerCount
+        - editorPickListCount
+        - startDateTime
+        - createdDate
+        - updatedDate
+      title: ''
+    EditorsPickError:
       description: ''
       type: object
       x-examples:
@@ -838,19 +851,6 @@ components:
       required:
         - id
         - status
-    ArticleStatus:
-      type: string
-      title: ArticleStatus
-      enum:
-        - draft
-        - published
-        - unpublished
-        - scheduled
-        - waiting
-        - rejected
-        - not found
-      examples:
-        - draft
     BannerList:
       title: BannerList
       type: object
@@ -2160,7 +2160,7 @@ components:
                 type: string
                 minLength: 1
               data:
-                $ref: '#/components/schemas/Schedule'
+                $ref: '#/components/schemas/EditorsPick'
             required:
               - successful
               - code
@@ -2226,13 +2226,13 @@ components:
                     uniqueItems: true
                     minItems: 1
                     items:
-                      $ref: '#/components/schemas/ScheduleError'
+                      $ref: '#/components/schemas/EditorsPickError'
                   editorPickLists:
                     type: array
                     uniqueItems: true
                     minItems: 1
                     items:
-                      $ref: '#/components/schemas/ScheduleError'
+                      $ref: '#/components/schemas/EditorsPickError'
             required:
               - successful
               - code
@@ -2851,6 +2851,7 @@ components:
               forceUpdate:
                 type: boolean
                 default: true
+                description: ''
             required:
               - editorsPickBannerIds
               - editorsPickListIds
@@ -2954,15 +2955,15 @@ components:
         default: 10
         minimum: 0
       description: The number of items to return
-    EditorsPick-StartDateTime:
-      name: startDateTime
+    EditorsPick-StartDateTimeFrom:
+      name: startDateTimeFrom
       in: query
       schema:
         type: string
         format: date-time
         minLength: 1
-    EditorsPick-EndDateTime:
-      name: endDateTime
+    EditorsPick-StartDateTimeTo:
+      name: startDateTimeTo
       in: query
       required: false
       schema:
@@ -3095,14 +3096,14 @@ components:
       required: true
       schema:
         type: integer
-    Schedule-Id:
-      name: scheduleId
+    EditorsPick-Id:
+      name: editorsPickId
       in: query
       required: true
       schema:
         type: integer
         minimum: 1
-    Schedule-StartDateTime:
+    EditorsPick-StartDateTime:
       name: startDateTime
       in: query
       schema:
