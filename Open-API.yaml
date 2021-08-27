@@ -774,9 +774,6 @@ components:
         id:
           type: number
           minimum: 1
-        ordered:
-          type: number
-          example: 1
         titleTh:
           type: string
           minLength: 1
