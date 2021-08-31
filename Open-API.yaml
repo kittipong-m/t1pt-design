@@ -455,7 +455,7 @@ paths:
           description: ID of editor pick
           required: true
     parameters: []
-  /delete_editors_pick:
+  /delete_editors_picks:
     parameters: []
     delete:
       summary: Delete Editor's Pick
