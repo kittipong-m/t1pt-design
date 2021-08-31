@@ -2972,6 +2972,7 @@ components:
         type: string
         format: date-time
         minLength: 1
+      description: must be greater than or equal to `startDateTimeFrom`
     Company-Id:
       name: companyId
       in: query
