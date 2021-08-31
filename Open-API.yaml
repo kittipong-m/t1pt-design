@@ -316,7 +316,7 @@ paths:
         - Article
       requestBody:
         $ref: '#/components/requestBodies/Article-Update'
-  /editors_pick_list:
+  /get_editors_picks:
     get:
       summary: Get Editor's Picks
       responses:
@@ -340,19 +340,23 @@ paths:
         - $ref: '#/components/parameters/EditorsPick-StartDateTimeTo'
         - schema:
             type: string
-            enum:
-              - startDateTime
-              - endDateTime
             default: startDateTime
+            enum:
+              - id
+              - startDateTime
+              - createdDate
+              - updatedDate
+              - editorsPickBannerCount
+              - editorsPickListCount
           in: query
           name: sortBy
           description: field to sort items
         - schema:
             type: string
+            default: asc
             enum:
               - asc
               - desc
-            default: asc
           in: query
           description: direction to sort items
           name: sortDirection
