@@ -446,6 +446,8 @@ paths:
           $ref: '#/components/responses/401-Unauthorized'
         '403':
           $ref: '#/components/responses/403-Forbidden'
+        '422':
+          $ref: '#/components/responses/422-E01-InvalidBannerOrList'
         '500':
           $ref: '#/components/responses/500-InternalServerError'
         '502':
@@ -2270,7 +2272,7 @@ components:
             example-1:
               value:
                 successful: false
-                code: E01
+                code: '14'
                 message: Some of editor's pick banners/lists have invalid status
                 data:
                   editorsPickBanners:
