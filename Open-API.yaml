@@ -230,13 +230,39 @@ paths:
           $ref: '#/components/responses/502-BadGateway'
       operationId: get-list_articles
       parameters:
-        - $ref: '#/components/parameters/Pagination-Limit'
+        - $ref: '#/components/parameters/Pagination-Limit-20'
         - $ref: '#/components/parameters/Pagination-Page'
         - $ref: '#/components/parameters/Article-Title'
         - $ref: '#/components/parameters/Article-Author'
-        - $ref: '#/components/parameters/Article-StatusId'
-        - $ref: '#/components/parameters/Pagination-SortBy'
-        - $ref: '#/components/parameters/Pagination-SortDirection'
+        - schema:
+            type: string
+            enum:
+              - id
+              - publishDate
+              - status
+              - titleEn
+              - titleTh
+              - template
+            default: publishDate
+          in: query
+          name: sortBy
+          description: field to sort items
+        - schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+          in: query
+          name: sortDirection
+          description: direction to sort items
+        - schema:
+            type: string
+            example: '2,3'
+          in: query
+          name: statusId
+          description: 'list of status Ids (1: draft, 2: published, 3: unpublished, 4: scheduled, 5: waiting and 6: rejected)'
+      description: '\* if any of status ids is invalid, API will return empty list'
   /get_article:
     get:
       summary: Get Article by ID
