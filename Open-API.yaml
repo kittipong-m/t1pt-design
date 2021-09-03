@@ -391,23 +391,17 @@ paths:
       description: Get list of editor's picks and current editor's pick
     parameters: []
   /check_editors_pick:
-    get:
+    post:
       summary: Check Duplicate Editor's Pick
-      tags:
-        - Editor's Pick
+      operationId: post-check_editors_pick
       responses:
-        '204':
-          description: No Content
-        '404':
-          $ref: '#/components/responses/404-DataNotFound'
-        '500':
-          $ref: '#/components/responses/500-InternalServerError'
-        '502':
-          $ref: '#/components/responses/502-BadGateway'
-      operationId: get-check_editors_pick
-      parameters:
-        - $ref: '#/components/parameters/EditorsPick-StartDateTime'
-      description: ''
+        '200':
+          $ref: '#/components/responses/EditorsPick-CheckDuplicate'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+      requestBody:
+        $ref: '#/components/requestBodies/EditorsPick-CheckDuplicate'
+      description: Check if Start DateTime is duplicate with other Editor's Pick
   /create_editors_pick:
     parameters: []
     post:
@@ -1060,6 +1054,11 @@ components:
                 code: '09'
                 message: Field id must be positive integer
                 data: null
+            Editor's Pick Check Duplicate:
+              value:
+                successful: false
+                code: '09'
+                message: Field startDateTime must be in correct format
     403-Forbidden:
       description: Forbidden or Access Denied
       content:
@@ -2350,6 +2349,41 @@ components:
             required:
               - successful
               - code
+    EditorsPick-CheckDuplicate:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                minLength: 1
+              message:
+                type: string
+                minLength: 1
+              data:
+                type: object
+                properties:
+                  isDuplicate:
+                    type: boolean
+                required:
+                  - isDuplicate
+            required:
+              - successful
+              - code
+              - message
+              - data
+            x-examples:
+              example-1:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  isDuplicate: false
   requestBodies:
     Authentication-Token:
       content:
@@ -2966,6 +3000,29 @@ components:
                 editorsPickIds:
                   - 1
       description: ''
+    EditorsPick-CheckDuplicate:
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            x-examples:
+              example-1:
+                editorsPickId: 1
+                startDateTime: '2021-07-05T00:00:00Z'
+            properties:
+              editorsPickId:
+                type: number
+              startDateTime:
+                type: string
+                minLength: 1
+            required:
+              - startDateTime
+          examples:
+            Example:
+              value:
+                editorsPickId: 1
+                startDateTime: '2021-07-05T00:00:00Z'
   parameters:
     Pagination-Page:
       name: page
