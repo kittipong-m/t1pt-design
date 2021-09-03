@@ -378,6 +378,99 @@ paths:
       parameters:
         - $ref: '#/components/parameters/Schedule-StartDateTime'
       description: ''
+    post:
+      summary: Check Editor's Pick DateTime
+      operationId: post-check_editors_pick
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  successful:
+                    type: boolean
+                  code:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                  data:
+                    type: object
+                    properties:
+                      isDuplicate:
+                        type: boolean
+                    required:
+                      - isDuplicate
+                required:
+                  - successful
+                  - code
+                  - message
+                  - data
+                x-examples:
+                  example-1:
+                    successful: true
+                    code: '00'
+                    message: Successful
+                    data:
+                      isDuplicate: false
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  successful:
+                    type: boolean
+                  code:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - successful
+                  - code
+                  - message
+                x-examples:
+                  example-1:
+                    successful: false
+                    code: '09'
+                    message: Field startDateTime must be in correct format
+      description: Check Editor's Pick Start DateTime
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              x-examples:
+                example-1:
+                  editorsPickId: 1
+                  startDateTime: '2021-07-05T00:00:00Z'
+              properties:
+                editorsPickId:
+                  type: number
+                startDateTime:
+                  type: string
+                  minLength: 1
+                  format: date-time
+                  example: '2021-07-05T00:00:00Z'
+                  default: '2021-07-05T00:00:00Z'
+                  description: Start DateTime in ISO-8601 Format
+              required:
+                - startDateTime
+            examples:
+              Example Value:
+                value:
+                  editorsPickId: 0
+                  startDateTime: '2021-07-05T00:00:00Z'
+        description: ''
   /create_editors_pick:
     parameters: []
     post:
