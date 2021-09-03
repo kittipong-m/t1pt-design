@@ -484,6 +484,8 @@ paths:
                   editorsPickId: 0
                   startDateTime: '2021-07-05T00:00:00Z'
         description: ''
+      tags:
+        - Editor's Pick
   /create_editors_pick:
     parameters: []
     post:
