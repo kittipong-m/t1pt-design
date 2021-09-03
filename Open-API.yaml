@@ -392,32 +392,6 @@ paths:
     parameters: []
   /check_editors_pick:
     post:
-      summary: Check Duplicate Editor's Pick
-      operationId: post-check_editors_pick
-      responses:
-        '200':
-          $ref: '#/components/responses/EditorsPick-CheckDuplicate'
-        '400':
-          $ref: '#/components/responses/400-BadRequest'
-      requestBody:
-        $ref: '#/components/requestBodies/EditorsPick-CheckDuplicate'
-      description: Check if Start DateTime is duplicate with other Editor's Pick
-      tags:
-        - Editor's Pick
-      responses:
-        '204':
-          description: No Content
-        '404':
-          $ref: '#/components/responses/404-DataNotFound'
-        '500':
-          $ref: '#/components/responses/500-InternalServerError'
-        '502':
-          $ref: '#/components/responses/502-BadGateway'
-      operationId: get-check_editors_pick
-      parameters:
-        - $ref: '#/components/parameters/Schedule-StartDateTime'
-      description: ''
-    post:
       summary: Check Editor's Pick DateTime
       operationId: post-check_editors_pick
       responses:
