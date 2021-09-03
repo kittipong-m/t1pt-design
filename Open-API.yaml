@@ -402,6 +402,8 @@ paths:
       requestBody:
         $ref: '#/components/requestBodies/EditorsPick-CheckDuplicate'
       description: Check if Start DateTime is duplicate with other Editor's Pick
+      tags:
+        - Editor's Pick
   /create_editors_pick:
     parameters: []
     post:
