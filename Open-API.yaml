@@ -423,8 +423,9 @@ paths:
                   - code
                   - message
                   - data
-                x-examples:
-                  example-1:
+              examples:
+                example-1:
+                  value:
                     successful: true
                     code: '00'
                     message: Successful
@@ -450,8 +451,9 @@ paths:
                   - successful
                   - code
                   - message
-                x-examples:
-                  example-1:
+              examples:
+                example-1:
+                  value:
                     successful: false
                     code: '09'
                     message: Field startDateTime must be in correct format
@@ -462,10 +464,6 @@ paths:
             schema:
               description: ''
               type: object
-              x-examples:
-                example-1:
-                  editorsPickId: 1
-                  startDateTime: '2021-07-05T00:00:00Z'
               properties:
                 editorsPickId:
                   type: number
@@ -481,7 +479,7 @@ paths:
             examples:
               Example Value:
                 value:
-                  editorsPickId: 0
+                  editorsPickId: 1
                   startDateTime: '2021-07-05T00:00:00Z'
         description: ''
       tags:
