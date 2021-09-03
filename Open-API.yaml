@@ -230,7 +230,7 @@ paths:
           $ref: '#/components/responses/502-BadGateway'
       operationId: get-list_articles
       parameters:
-        - $ref: '#/components/parameters/Pagination-Limit-20'
+        - $ref: '#/components/parameters/Pagination-Limit'
         - $ref: '#/components/parameters/Pagination-Page'
         - $ref: '#/components/parameters/Article-Title'
         - $ref: '#/components/parameters/Article-Author'
