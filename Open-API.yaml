@@ -591,6 +591,157 @@ paths:
       description: |-
         - Can't Delete current Editor's Pick (`editorsPickIds` not contain current Editor's Pick Id)
         - If some of Banner/List are `not found` or `removed` it will still be `success`
+  /create_partnerCode:
+    post:
+      summary: Create Partner code
+      operationId: post-create_partnerCode
+      responses:
+        '200':
+          $ref: '#/components/responses/Partner-Create'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-DataNotFound'
+        '422':
+          $ref: '#/components/responses/422-Partner'
+      description: Call when create partner code
+      requestBody:
+        $ref: '#/components/requestBodies/Partner-Create'
+      tags:
+        - Partner
+  /edit_partnerCode:
+    post:
+      summary: Edit Partner code
+      operationId: post-edit_partnerCode
+      responses:
+        '200':
+          $ref: '#/components/responses/Partner-Create'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-DataNotFound'
+        '422':
+          $ref: '#/components/responses/422-Partner'
+      description: Call when create partner code
+      requestBody:
+        $ref: '#/components/requestBodies/Partner-Update'
+      tags:
+        - Partner
+  /get_partner_code:
+    get:
+      summary: Get Partner code by id
+      tags:
+        - Partner
+      responses:
+        '200':
+          $ref: '#/components/responses/Partner-Create'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-DataNotFound'
+        '422':
+          $ref: '#/components/responses/422-Partner'
+      operationId: get-get_partnerCode
+      description: Call when need to list partner code by company
+      parameters:
+        - schema:
+            type: integer
+            maximum: 64
+            example: 1
+          in: query
+          name: partnerId
+          description: Partner code Id
+          required: true
+    parameters: []
+  /list_brand_by_partner:
+    get:
+      summary: List brand by partner id
+      tags:
+        - Brand
+      responses:
+        '200':
+          $ref: '#/components/responses/Brand-ListBrand'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '404':
+          $ref: '#/components/responses/404-DataNotFound'
+      operationId: get-list_brand_by_partner
+      description: Call when need to list brand by Partner id
+      parameters:
+        - schema:
+            type: integer
+            maximum: 64
+            example: 1
+          in: query
+          name: partnerId
+          description: Partner code Id
+          required: true
+        - $ref: '#/components/parameters/Pagination-Page'
+        - $ref: '#/components/parameters/Pagination-Limit'
+        - schema:
+            type: boolean
+            example: 'true'
+          in: query
+          name: assigned
+          description: This partner are assigned
+        - $ref: '#/components/parameters/Pagination-Keyword'
+  /delete_partner_code:
+    parameters: []
+    delete:
+      summary: Delete partner code
+      operationId: delete-delete_partner_code
+      responses:
+        '200':
+          $ref: '#/components/responses/200-SuccessWithoutData'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-DataNotFound'
+      description: Call when need to delete partner code
+      requestBody:
+        $ref: '#/components/requestBodies/Partner-Delete'
+      tags:
+        - Partner
+  /create_brand:
+    post:
+      summary: Create draft brand
+      operationId: post-create_brand
+      responses:
+        '200':
+          $ref: '#/components/responses/Brand-Create'
+        '400':
+          $ref: '#/components/responses/400-BadRequest'
+        '401':
+          $ref: '#/components/responses/401-Unauthorized'
+        '403':
+          $ref: '#/components/responses/403-Forbidden'
+        '404':
+          $ref: '#/components/responses/404-DataNotFound'
+        '422':
+          $ref: '#/components/responses/422-BrandCodeDuplicated'
+      tags:
+        - Brand
+      description: Call when save in create new brand
+      requestBody:
+        $ref: '#/components/requestBodies/Brand-Create'
 components:
   schemas:
     Pagination:
@@ -983,6 +1134,180 @@ components:
       required:
         - id
         - status
+    BrandList:
+      title: Brand
+      type: object
+      properties:
+        brandId:
+          type: integer
+          example: 1
+        brandNameEn:
+          type: string
+          example: Primo
+        brandNameTh:
+          type: string
+          example: พรีโม่
+        brandCode:
+          type: string
+          example: primo
+        brandPhonePrefix:
+          type: string
+          example: '+66'
+        brandPhoneNumber:
+          type: string
+          example: '2123123'
+        brandEmail:
+          type: string
+          example: info@primo.mobi
+        showInApp:
+          type: boolean
+        status:
+          type: integer
+          example: 1
+        statusDesc:
+          type: string
+          example: Draft
+        createdBy:
+          type: string
+          example: Primo_Admin
+        createdAt:
+          type: string
+          example: '2021-01-31T00:00:00Z'
+          format: date-time
+        updatedBy:
+          type: string
+          example: Primo_Admin
+        updatedAt:
+          type: string
+          example: '2021-02-01T00:00:00Z'
+          format: date-time
+      required:
+        - brandId
+        - brandNameEn
+        - brandNameTh
+        - brandCode
+        - brandPhonePrefix
+        - brandPhoneNumber
+        - brandEmail
+        - showInApp
+        - status
+        - statusDesc
+        - createdBy
+        - createdAt
+        - updatedBy
+        - updatedAt
+    Feature:
+      title: Feature
+      type: object
+      properties:
+        brandFeatureLabel:
+          type: string
+          example: Test
+        brandFeatureTypeId:
+          type: integer
+          example: 1
+        brandFeatureValue:
+          type: string
+          example: '0812345678'
+        brandFeatureLogoImg:
+          type: string
+          example: 'data:image/jpeg;base64,/9j/4gv'
+        showInApp:
+          type: boolean
+      required:
+        - showInApp
+      examples:
+        - brandFeatureLabel: Test
+          brandFeatureTypeId: 1
+          brandFeatureValue: '0812345678'
+          brandFeatureLogoImg: 'data:image/jpeg;base64,/9j/4gv'
+          showInApp: true
+    BrandAdditional:
+      title: BrandAdditional
+      type: object
+      properties:
+        additionalLogoImg:
+          type: string
+          example: s3_link
+        additionalBannerImg:
+          type: string
+          example: s3_link
+        additionalInfo:
+          type: string
+          example: 'null'
+      required:
+        - additionalLogoImg
+      examples:
+        - additionalLogoImg: s3_link
+          additionalBannerImg: s3_link
+          additionalInfo: null
+    BrandFeature:
+      title: BrandFeature
+      type: object
+      properties:
+        brandFeatureId:
+          type: integer
+          example: 1
+        brandFeatureLabel:
+          type: string
+          example: Web
+        brandFeatureTypeId:
+          type: integer
+          example: 1
+        brandFeatureValue:
+          type: string
+          example: the1.co.th
+        brandFeatureLogoImg:
+          type: string
+          example: s3_link
+        showInApp:
+          type: boolean
+      required:
+        - brandFeatureId
+        - showInApp
+      examples:
+        - brandFeatureId: 1
+          brandFeatureLabel: Web
+          brandFeatureTypeId: 1
+          brandFeatureValue: the1.co.th
+          brandFeatureLogoImg: s3_link
+          showInApp: true
+    Partner:
+      title: Partner
+      type: object
+      properties:
+        partnerId:
+          type: integer
+          example: 1
+        partnerCode:
+          type: string
+          example: cmg1234
+        partnerName:
+          type: string
+          example: Central Marketing group 1234
+        numberOfBrands:
+          type: integer
+          example: 1
+        status:
+          type: integer
+          example: 2
+        statusDesc:
+          type: string
+          example: Active
+        brandIds:
+          type: array
+          items:
+            type: integer
+            example: 1
+      examples:
+        - partnerId: 1
+          partnerCode: cmg1234
+          partnerName: Central Marketing group 1234
+          numberOfBrands: 1
+          status: 2
+          statusDesc: Active
+          brandIds:
+            - 1
   securitySchemes:
     Authorization:
       type: oauth2
@@ -2472,6 +2797,479 @@ components:
                 message: Successful
                 data:
                   isDuplicate: false
+    Partner-Create:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+                example: '00'
+              message:
+                type: string
+                example: Successful
+              data:
+                type: object
+                properties:
+                  partnerId:
+                    type: integer
+                    example: 1
+                  partnerCode:
+                    type: string
+                    example: Cmg1234
+                    maxLength: 255
+                  partnerName:
+                    type: string
+                    example: Central Marketing group 1234
+                    maxLength: 255
+                  status:
+                    type: integer
+                    example: 1
+                  statusDesc:
+                    type: string
+                    example: Draft
+                  companyId:
+                    type: integer
+                    example: 1
+                required:
+                  - partnerId
+                  - partnerCode
+                  - partnerName
+                  - status
+                  - statusDesc
+                  - companyId
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  partnerId: 1
+                  partnerCode: Cmg1234
+                  partnerName: Central Marketing group 1234
+                  status: 1
+                  statusDesc: Draft
+                  companyId: 1
+    422-Partner:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              successful:
+                type: boolean
+                default: false
+              code:
+                type: string
+                example: '07'
+              message:
+                type: string
+                example: Partner code is duplicated
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            Partner Duplicate:
+              value:
+                successful: false
+                code: '07'
+                message: Partner code is duplicated
+                data: null
+            Company Not Found:
+              value:
+                successful: false
+                code: '08'
+                message: Company ID is invalid
+                data: null
+    422-08-CompanyNotFound:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              successful:
+                type: boolean
+                default: false
+              code:
+                type: string
+                example: '08'
+              message:
+                type: string
+                example: Company ID is invalid
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: false
+                code: '08'
+                message: Company ID is invalid
+                data: null
+    Brand-ListBrand:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              successful:
+                type: boolean
+                default: true
+              code:
+                type: string
+                example: '00'
+              message:
+                type: string
+                example: Successful
+              data:
+                type: object
+                properties:
+                  total:
+                    type: integer
+                    example: 1
+                  currentPage:
+                    type: integer
+                    example: 1
+                  totalPage:
+                    type: integer
+                    example: 1
+                  brand:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandList'
+                required:
+                  - total
+                  - currentPage
+                  - totalPage
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: '00'
+                message: Successful
+                data:
+                  total: 1
+                  currentPage: 1
+                  totalPage: 1
+                  brand:
+                    - brandId: 1
+                      brandNameEn: Primo
+                      brandNameTh: พรีโม่
+                      brandCode: primo
+                      brandPhonePrefix: '+66'
+                      brandPhoneNumber: '2123123'
+                      brandEmail: info@primo.mobi
+                      showInApp: true
+                      status: 1
+                      statusDesc: Draft
+                      createdBy: Primo_Admin
+                      createdAt: '2021-01-31T00:00:00Z'
+                      updatedBy: Primo_Admin
+                      updatedAt: '2021-02-01T00:00:00Z'
+    Brand-Create:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  brandId:
+                    type: integer
+                    example: 1
+                  brandNameEn:
+                    type: string
+                    example: Primo
+                  brandNameTh:
+                    type: string
+                    example: พรีโม
+                  brandCode:
+                    type: string
+                    example: primo
+                  brandAdditional:
+                    $ref: '#/components/schemas/BrandAdditional'
+                  brandPhonePrefix:
+                    type: string
+                    example: '+66'
+                  brandPhoneNumber:
+                    type: string
+                    example: '2123123'
+                  brandEmail:
+                    type: string
+                    example: info@primo.mobi
+                  brandFeature:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandFeature'
+                  numberOfBranches:
+                    type: integer
+                  partners:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Partner'
+                  showInApp:
+                    type: boolean
+                  status:
+                    type: integer
+                    example: 1
+                  statusDesc:
+                    type: string
+                    example: Draft
+                  createdBy:
+                    type: string
+                    example: Primo_Admin
+                  createdAt:
+                    type: string
+                    example: '2021-01-31T00:00:00Z'
+                    format: date-time
+                required:
+                  - brandId
+                  - brandNameEn
+                  - brandNameTh
+                  - brandCode
+                  - brandPhonePrefix
+                  - brandPhoneNumber
+                  - brandEmail
+                  - numberOfBranches
+                  - showInApp
+                  - status
+                  - statusDesc
+                  - createdBy
+                  - createdAt
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: string
+                message: string
+                data:
+                  brandId: 1
+                  brandNameEn: Primo
+                  brandNameTh: พรีโม
+                  brandCode: primo
+                  brandAdditional:
+                    additionalLogoImg: s3_link
+                    additionalBannerImg: s3_link
+                    additionalInfo: null
+                  brandPhonePrefix: '+66'
+                  brandPhoneNumber: '2123123'
+                  brandEmail: info@primo.mobi
+                  brandFeature:
+                    - brandFeatureId: 1
+                      brandFeatureLabel: Web
+                      brandFeatureTypeId: 1
+                      brandFeatureValue: the1.co.th
+                      brandFeatureLogoImg: s3_link
+                      showInApp: true
+                  numberOfBranches: 0
+                  partners:
+                    - partnerId: 1
+                      partnerCode: cmg1234
+                      partnerName: Central Marketing group 1234
+                      numberOfBrands: 1
+                      status: 2
+                      statusDesc: Active
+                      brandIds:
+                        - 1
+                  showInApp: true
+                  status: 1
+                  statusDesc: Draft
+                  createdBy: Primo_Admin
+                  createdAt: '2021-01-31T00:00:00Z'
+    Brand-GetBrand:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              successful:
+                type: boolean
+              code:
+                type: string
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  brandId:
+                    type: integer
+                    example: 1
+                  brandNameEn:
+                    type: string
+                    example: Primo
+                  brandNameTh:
+                    type: string
+                    example: พรีโม
+                  brandCode:
+                    type: string
+                    example: primo
+                  brandAdditional:
+                    $ref: '#/components/schemas/BrandAdditional'
+                  brandPhonePrefix:
+                    type: string
+                    example: '+66'
+                  brandPhoneNumber:
+                    type: string
+                    example: '2123123'
+                  brandEmail:
+                    type: string
+                    example: info@primo.mobi
+                  brandFeature:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BrandFeature'
+                  numberOfBranches:
+                    type: integer
+                  partners:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Partner'
+                  showInApp:
+                    type: boolean
+                  status:
+                    type: integer
+                    example: 1
+                  statusDesc:
+                    type: string
+                    example: Draft
+                  createdBy:
+                    type: string
+                    example: Primo_Admin
+                  createdAt:
+                    type: string
+                    example: '2021-01-31T00:00:00Z'
+                    format: date-time
+                  updatedBy:
+                    type: string
+                    example: Primo_Admin
+                  updatedAt:
+                    type: string
+                    example: '2021-02-01T00:00:00Z'
+                    format: date-time
+                required:
+                  - brandId
+                  - brandNameEn
+                  - brandNameTh
+                  - brandCode
+                  - brandPhonePrefix
+                  - brandPhoneNumber
+                  - brandEmail
+                  - numberOfBranches
+                  - showInApp
+                  - status
+                  - statusDesc
+                  - createdBy
+                  - createdAt
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: true
+                code: string
+                message: string
+                data:
+                  brandId: 1
+                  brandNameEn: Primo
+                  brandNameTh: พรีโม
+                  brandCode: primo
+                  brandAdditional:
+                    additionalLogoImg: s3_link
+                    additionalBannerImg: s3_link
+                    additionalInfo: null
+                  brandPhonePrefix: '+66'
+                  brandPhoneNumber: '2123123'
+                  brandEmail: info@primo.mobi
+                  brandFeature:
+                    - brandFeatureId: 1
+                      brandFeatureLabel: Web
+                      brandFeatureTypeId: 1
+                      brandFeatureValue: the1.co.th
+                      brandFeatureLogoImg: s3_link
+                      showInApp: true
+                  numberOfBranches: 0
+                  partners:
+                    - partnerId: 1
+                      partnerCode: cmg1234
+                      partnerName: Central Marketing group 1234
+                      numberOfBrands: 1
+                      status: 2
+                      statusDesc: Active
+                      brandIds:
+                        - 1
+                  showInApp: true
+                  status: 1
+                  statusDesc: Draft
+                  createdBy: Primo_Admin
+                  createdAt: '2021-01-31T00:00:00Z'
+                  updatedBy: Primo_Admin
+                  updatedAt: '2021-02-01T00:00:00Z'
+    422-BrandCodeDuplicated:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              successful:
+                type: boolean
+                default: false
+              code:
+                type: string
+                example: '07'
+              message:
+                type: string
+                example: Brand code is duplicated
+              data:
+                type: 'null'
+            required:
+              - successful
+              - code
+              - message
+          examples:
+            example-1:
+              value:
+                successful: false
+                code: '07'
+                message: Brand code is duplicated
+                data: null
   requestBodies:
     Authentication-Token:
       content:
@@ -3111,6 +3909,197 @@ components:
               value:
                 editorsPickId: 1
                 startDateTime: '2021-07-05T00:00:00Z'
+    Partner-Create:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              partnerCode:
+                type: string
+                example: Cmg1234
+                maxLength: 255
+              partnerName:
+                type: string
+                example: Central Marketing group 1234
+                maxLength: 255
+              companyId:
+                type: integer
+                example: 1
+                maximum: 64
+            required:
+              - partnerCode
+              - partnerName
+              - companyId
+          examples:
+            example-1:
+              value:
+                partnerCode: Cmg1234
+                partnerName: Central Marketing group 1234
+                companyId: 1
+    Partner-Update:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              partnerId:
+                type: integer
+                description: Partner id
+                maximum: 64
+                example: 1
+              partnerCode:
+                type: string
+                description: Partner code
+                example: Cmg1234
+                maxLength: 255
+              partnerName:
+                type: string
+                description: Partner name
+                example: Central Marketing group 12345
+                maxLength: 255
+              status:
+                type: integer
+                description: Status id
+                example: 2
+                maximum: 64
+            required:
+              - partnerId
+          examples:
+            example-1:
+              value:
+                partnerId: 1
+                partnerCode: Cmg1234
+                partnerName: Central Marketing group 12345
+                status: 2
+    Partner-Delete:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              partnerId:
+                type: array
+                maxItems: 255
+                items:
+                  type: integer
+                  example: 1
+            required:
+              - partnerId
+          examples:
+            example-1:
+              value:
+                partnerId:
+                  - 1
+    Brand-Create:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyId:
+                type: integer
+                example: 1
+                maximum: 64
+                description: Company id
+              brandNameTh:
+                type: string
+                description: Name (EN)
+                example: พรีโม
+                maxLength: 255
+              brandNameEn:
+                type: string
+                description: Name (TH)
+                example: Primo
+                maxLength: 255
+              brandCode:
+                type: string
+                description: Brand code
+                example: primo
+                maxLength: 255
+              brandLogoImg:
+                type: string
+                description: Brand logo base64
+                example: Base64
+                maxLength: 255
+              brandBannerImg:
+                type: string
+                description: Brand banner base64
+                example: Base64
+                maxLength: 255
+              brandInfo:
+                type: string
+                description: Brand info
+                maxLength: 255
+              brandLink:
+                type: string
+                description: Brand URL
+                maxLength: 255
+              brandPhonePrefix:
+                type: string
+                description: Brand Prefix
+                maxLength: 64
+                example: '+66'
+              brandPhoneNumber:
+                type: string
+                description: Brand Number
+                maxLength: 64
+                example: '2123123'
+              brandEmail:
+                type: string
+                description: Email
+                example: Info@primo.mobi
+                maxLength: 255
+              showInApp:
+                type: boolean
+                description: Show in the 1 app
+              partnerId:
+                type: array
+                description: 'List of Partner '
+                maxItems: 255
+                items:
+                  type: integer
+                  example: 1
+              feature:
+                type: array
+                description: List of Features
+                maxItems: 255
+                items:
+                  $ref: '#/components/schemas/Feature'
+            required:
+              - companyId
+              - brandNameTh
+              - brandNameEn
+              - brandCode
+              - brandLogoImg
+              - brandPhonePrefix
+              - brandPhoneNumber
+              - brandEmail
+              - showInApp
+              - partnerId
+          examples:
+            example-1:
+              value:
+                companyId: 1
+                brandNameTh: พรีโม
+                brandNameEn: Primo
+                brandCode: primo
+                brandLogoImg: Base64
+                brandBannerImg: Base64
+                brandInfo: string
+                brandLink: string
+                brandPhonePrefix: '+66'
+                brandPhoneNumber: '2123123'
+                brandEmail: Info@primo.mobi
+                showInApp: true
+                partnerId:
+                  - 1
+                feature:
+                  - brandFeatureLabel: Test
+                    brandFeatureTypeId: 1
+                    brandFeatureValue: '0812345678'
+                    brandFeatureLogoImg: 'data:image/jpeg;base64,/9j/4gv'
+                    showInApp: true
   parameters:
     Pagination-Page:
       name: page
