@@ -992,6 +992,9 @@ components:
           scopes: {}
           refreshUrl: /auth/refresh_token
       description: ''
+    Bearer:
+      type: http
+      scheme: bearer
   responses:
     404-DataNotFound:
       description: Data Not Found
@@ -3295,4 +3298,5 @@ tags:
   - name: Role
   - name: User
 security:
+  - Bearer: []
   - Authorization: []
