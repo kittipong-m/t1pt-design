@@ -33,6 +33,7 @@ paths:
         $ref: '#/components/requestBodies/Authentication-Token'
       tags:
         - Authentication
+      security: []
   /auth/refresh_token:
     post:
       summary: Refresh Token
@@ -48,6 +49,7 @@ paths:
         $ref: '#/components/requestBodies/Authentication-Refresh'
       tags:
         - Authentication
+      security: []
   /auth/logout:
     post:
       summary: Logout
@@ -63,6 +65,7 @@ paths:
         $ref: '#/components/requestBodies/Authentication-Logout'
       tags:
         - Authentication
+      security: []
   /create_company:
     post:
       summary: Create Company
@@ -3291,3 +3294,5 @@ tags:
   - name: Partner
   - name: Role
   - name: User
+security:
+  - Authorization: []
