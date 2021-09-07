@@ -780,7 +780,7 @@ paths:
           description: If need partner data
   /update_brand:
     post:
-      summary: ''
+      summary: Update brand
       operationId: post-update_brand
       responses:
         '200':
@@ -802,7 +802,7 @@ paths:
         - Brand
   /submit_brand:
     post:
-      summary: ''
+      summary: Submit brand
       operationId: post-submit_brand
       responses:
         '200':
@@ -824,7 +824,7 @@ paths:
         - Brand
   /list_brand:
     get:
-      summary: Your GET endpoint
+      summary: List brand
       tags:
         - Brand
       responses:
@@ -859,7 +859,7 @@ paths:
         - $ref: '#/components/parameters/Pagination-SortDirection'
   /delete_brand:
     delete:
-      summary: ''
+      summary: Delete brand
       operationId: delete-delete_brand
       responses:
         '200':
@@ -880,7 +880,7 @@ paths:
   /update_brand_status:
     parameters: []
     post:
-      summary: ''
+      summary: Update brands status
       operationId: post-update_brand_status
       responses:
         '200':
@@ -899,7 +899,7 @@ paths:
         - Brand
   /create_branch:
     post:
-      summary: ''
+      summary: Create branch
       operationId: post-create_branch
       responses:
         '200':
